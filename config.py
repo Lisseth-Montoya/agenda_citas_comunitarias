@@ -1,0 +1,3 @@
+# (Opcional por ahora; lo usaremos cuando conectemos BD)
+# from dotenv import load_dotenv; load_dotenv()
+# class Config: ...
