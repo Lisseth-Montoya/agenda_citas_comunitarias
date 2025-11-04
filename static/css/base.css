@@ -1,0 +1,81 @@
+
+
+/* Base */
+:root{
+  --dark-900:#333333;
+  --teal-700:#0a9a9e;
+  --teal-500:#0cb3b7;
+  --white:#ffffff;
+  --gray-500:#aaaaaa;
+}
+
+.bg-body{ background:#ffffff; }
+.text-dark-900{ color:var(--dark-900)!important; }
+
+/* Sidebar layout */
+@media (min-width:992px){
+  .app-sidebar{
+    width: 280px;
+    transform:none!important;
+    visibility:visible!important;
+    position:fixed;
+    top:56px;           /* altura header */
+    bottom:0;
+    border-right:1px solid #e9ecef;
+  }
+  .content-wrapper{
+    margin-left:280px;
+    padding-top:12px;
+  }
+}
+
+/* Header */
+.app-header h1{ color:var(--dark-900); }
+
+/* Sidebar header (banda de color) */
+.sidebar-header{
+  background:var(--teal-700);
+}
+
+/* Links del menú */
+.nav .nav-link{
+  border-radius:.5rem;
+  padding:.55rem .75rem;
+  color:var(--dark-900);
+  transition:background .15s ease, color .15s ease;
+}
+.nav .nav-link i{ opacity:.9; }
+.nav .nav-link:hover{
+  background:rgba(10,154,158,.10); /* #0a9a9e con 10% */
+}
+.nav .nav-link.active{
+  background:var(--teal-500);
+  color:var(--white);
+}
+.nav .nav-link.active i{ color:var(--white); }
+
+/* Subtítulos de sección */
+.text-muted{
+  color:var(--gray-500)!important;
+}
+
+/* Offcanvas fondo en móvil */
+.app-sidebar .offcanvas-body{ background:#fff; }
+
+/* Botón móvil */
+.btn-outline-secondary{
+  color:var(--dark-900);
+  border-color:#ddd;
+}
+.btn-outline-secondary:hover{
+  background:#f6f6f6;
+}
+
+/* Tabla/inputs genéricos (si los usas) */
+.form-control, .form-select{
+  border-color:#dfe3e6;
+}
+.form-control:focus, .form-select:focus{
+  border-color:var(--teal-500);
+  box-shadow:0 0 0 .2rem rgba(12,179,183,.25);
+}
