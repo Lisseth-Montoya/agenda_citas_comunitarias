@@ -1,8 +1,6 @@
-{% extends "base.html" %}
-
-{% block title %}{{ page_title or "Inicio" }} — Agenda de Citas{% endblock %}
-
+{% extends 'layout/base.html' %}
+{% block title %}{{ page_title or 'Agenda' }}{% endblock %}
 {% block content %}
-  <h2 class="mb-3 text-dark-900">{{ page_title or "Inicio" }}</h2>
-  <p class="text-muted">Si ves el encabezado teal en el sidebar, el CSS está cargando.</p>
+  <h2 class="mb-3">{{ page_title or 'Agenda' }}</h2>
+  <p>Bienvenido al sistema de citas.</p>
 {% endblock %}
