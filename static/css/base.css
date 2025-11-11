@@ -1,0 +1,123 @@
+/* =========================================================
+   BASE GENERAL
+   ========================================================= */
+:root{
+  --dark-900:#333333;
+  --teal-700:#0a9a9e;
+  --teal-500:#0cb3b7;
+  --white:#ffffff;
+  --gray-500:#aaaaaa;
+
+  --header-h:56px;
+  --sidebar-w:280px;
+}
+
+html, body { height:100%; }
+body{
+  overflow:hidden;             
+  background:#f8f9fa;           
+  color:var(--dark-900);
+}
+
+.bg-body{ background:var(--white); }
+.text-dark-900{ color:var(--dark-900)!important; }
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+.app-header h1{ color:var(--dark-900); }
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+.sidebar-header{
+  background:var(--teal-700);
+}
+
+/* Links del menú */
+.nav .nav-link{
+  border-radius:.5rem;
+  padding:.55rem .75rem;
+  color:var(--dark-900);
+  transition:background .15s ease, color .15s ease;
+}
+.nav .nav-link i{ opacity:.9; }
+.nav .nav-link:hover{
+  background:rgba(10,154,158,.10); /* #0a9a9e con 10% */
+}
+.nav .nav-link.active{
+  background:var(--teal-500);
+  color:var(--white);
+}
+.nav .nav-link.active i{ color:var(--white); }
+
+/* Subtítulos de sección */
+.text-muted{ color:var(--gray-500)!important; }
+
+/* Fondo offcanvas (móvil) */
+.app-sidebar .offcanvas-body{ background:var(--white); }
+
+/* =========================================================
+   BOTONES
+   ========================================================= */
+.btn-outline-secondary{
+  color:var(--dark-900);
+  border-color:#ddd;
+}
+.btn-outline-secondary:hover{
+  background:#f6f6f6;
+}
+
+/* =========================================================
+   FORMULARIOS
+   ========================================================= */
+.form-control, .form-select{
+  border-color:#dfe3e6;
+}
+.form-control:focus, .form-select:focus{
+  border-color:var(--teal-500);
+  box-shadow:0 0 0 .2rem rgba(12,179,183,.25);
+}
+
+/* =========================================================
+   LAYOUT GENERAL (Header fijo + Sidebar fijo + Fondo estable)
+   ========================================================= */
+@media (min-width:992px){
+  .app-sidebar{
+    position:fixed;
+    top:var(--header-h);
+    left:0;
+    width:var(--sidebar-w);
+    height:calc(100dvh - var(--header-h));
+    border-right:1px solid #e9ecef;
+    background:var(--white);
+    overflow:auto;             
+    transform:none!important;
+    visibility:visible!important;
+  }
+
+  .content-wrapper{
+    position:fixed;
+    top:var(--header-h);
+    left:var(--sidebar-w);
+    right:0;
+    bottom:0;
+    background:var(--white);
+    overflow:auto;            
+    padding:1.25rem;          
+  }
+}
+
+/* En pantallas móviles */
+@media (max-width:991.98px){
+  .content-wrapper{
+    position:fixed;
+    top:var(--header-h);
+    left:0;
+    right:0;
+    bottom:0;
+    background:var(--white);
+    overflow:auto;
+    padding:1.25rem;
+  }
+}

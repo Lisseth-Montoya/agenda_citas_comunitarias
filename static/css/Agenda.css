@@ -1,0 +1,44 @@
+body {
+  background-color: #ffffff;
+  color: #333333;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+header {
+  background-color: #0a9a9e !important;
+}
+
+.card-header {
+  background-color: #0a9a9e;
+  color: #ffffff;
+  text-align: center;
+}
+
+.table th {
+  background-color: #0cb3b7;
+  color: #ffffff;
+}
+
+.table-hover tbody tr:hover {
+  background-color: #f2fefe;
+}
+
+.btn-outline-primary:hover {
+  background-color: #0a9a9e;
+  color: #fff;
+}
+
+.btn-outline-warning:hover {
+  background-color: #ffc107;
+  color: #000;
+}
+
+.btn-outline-danger:hover {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+footer {
+  color: #aaaaaa;
+  font-size: 0.9rem;
+}

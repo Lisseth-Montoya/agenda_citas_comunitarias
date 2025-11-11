@@ -1,0 +1,66 @@
+{% extends "Layout/base.html" %}
+
+{% block title %}Agenda de Citas{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/Agenda.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="card mb-4 shadow-sm">
+  <div class="card-header fw-semibold">Filtros de búsqueda</div>
+  <div class="card-body">
+    <form class="row g-3">
+      <div class="col-md-4">
+        <label for="filtroFecha" class="form-label">Fecha</label>
+        <input type="date" id="filtroFecha" class="form-control">
+      </div>
+      <div class="col-md-4">
+        <label for="filtroProfesional" class="form-label">Profesional</label>
+        <select id="filtroProfesional" class="form-select">
+          <option selected value="">Todos</option>
+          <option>Dr. Juan Pérez</option>
+          <option>Dra. María López</option>
+          <option>Dra. Teresa Gómez</option>
+        </select>
+      </div>
+      <div class="col-md-4">
+        <label for="filtroEstado" class="form-label">Estado</label>
+        <select id="filtroEstado" class="form-select">
+          <option selected value="">Todos</option>
+          <option>Programada</option>
+          <option>Completada</option>
+          <option>Cancelada</option>
+        </select>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="card shadow-sm">
+  <div class="card-header fw-semibold">Listado de citas</div>
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle">
+        <thead class="table-primary">
+          <tr>
+            <th>ID</th>
+            <th>Paciente</th>
+            <th>Profesional</th>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="tablaCitas">
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/Agenda.js') }}"></script>
+{% endblock %}
