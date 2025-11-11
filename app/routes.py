@@ -27,9 +27,12 @@ def pacientes():
 def doctores():
     return render_template("layout/index.html", page_title="Doctores")
 
-@bp.route("/especialidades")
+
+
+@bp.route('/especialidades')
 def especialidades():
-    return render_template("layout/index.html", page_title="Especialidades")
+    return render_template('modulos/especialidades/especialidades.html')
+
 
 @bp.route("/reportes")
 def reportes():
