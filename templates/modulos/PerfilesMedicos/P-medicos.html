@@ -1,146 +1,244 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gestión de Perfiles Médicos</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="P-medicos.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Agenda Médica - Perfiles</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&display=swap" rel="stylesheet">
+    
+    <!-- CSS personalizado -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/P-medicos.css') }}">
 </head>
-<body class="bg-light">
-
-<link rel="stylesheet" href="{{ url_for('static', filename='P-medicos.css')}}">
-
-  <!-- Encabezado -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow">
-    <div class="container-fluid">
-      <a class="navbar-brand fw-bold" href="#"> Medicos</a>
-      <div class="d-flex">
+<body>
+    <!-- Contenedor principal -->
+    <div class="main-container">
         
-        
-      </div>
-    </div>
-  </nav>
-
-  <div class="container my-4">
-    <div class="row">
-      <!-- Formulario -->
-      <div class="col-lg-4 mb-4">
-        <div class="card shadow-sm">
-          <div class="card-header bg-primary text-white">
-            <h5 class="mb-0">Registrar / Editar Médico</h5>
-          </div>
-          <div class="card-body">
-            <form id="formMedico">
-              <div class="mb-3">
-                <label class="form-label">Nombre Completo</label>
-                <input type="text" class="form-control" placeholder="Ej. Dr. Juan Pérez">
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Especialidad</label>
-                <select class="form-select">
-                  <option value="">Seleccione una especialidad</option>
-                  <option>Cardiología</option>
-                  <option>Pediatría</option>
-                  <option>Neurología</option>
-                  <option>Dermatología</option>
-                  <option>Odontología</option>
-                </select>
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Número de Colegiado</label>
-                <input type="text" class="form-control" placeholder="Ej. 12345-MD">
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Años de Experiencia</label>
-                <input type="number" class="form-control" placeholder="Ej. 10">
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Horario Disponible</label>
-                <input type="text" class="form-control" placeholder="Ej. Lunes a Viernes 8:00 - 16:00">
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Estado</label>
-                <select class="form-select">
-                  <option>Activo</option>
-                  <option>Inactivo</option>
-                </select>
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Observaciones</label>
-                <textarea class="form-control" rows="2" placeholder="Comentarios o notas"></textarea>
-              </div>
-              <div class="d-grid">
-                <button type="submit" class="btn btn-success">Guardar</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-
-      <!-- Tabla -->
-      <div class="col-lg-8">
-        <div class="card shadow-sm">
-          <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-            <h5 class="mb-0">Listado de Médicos</h5>
-            <div class="d-flex gap-2">
-              <input type="text" id="buscar" class="form-control form-control-sm" placeholder="Buscar médico...">
-              <select class="form-select form-select-sm" id="filtroEspecialidad">
-                <option value="">Todas</option>
-                <option>Cardiología</option>
-                <option>Pediatría</option>
-                <option>Neurología</option>
-                <option>Dermatología</option>
-                <option>Odontología</option>
-              </select>
+        <!-- Header con logo -->
+        <header class="header-section">
+            <div class="logo-container">
+                <img src="logotipo.png" alt="Logo Sistema de Agenda Médica" class="logo-img">
+                <div class="logo-text">
+                    <h1>Sistema de Agenda Médica</h1>
+                    <p class="tagline">Tu Salud, Organizada</p>
+                </div>
             </div>
-          </div>
-          <div class="table-responsive">
-            <table class="table table-striped align-middle mb-0">
-              <thead class="table-primary text-center">
-                <tr>
-                  <th>Nombre</th>
-                  <th>Especialidad</th>
-                  <th>Colegiado</th>
-                  <th>Experiencia</th>
-                  <th>Horario</th>
-                  <th>Estado</th>
-                  <th>Acciones</th>
-                </tr>
-              </thead>
-              <tbody id="tablaMedicos" class="text-center">
-                <tr>
-                  <td>Dr. Juan Pérez</td>
-                  <td>Cardiología</td>
-                  <td>12345-MD</td>
-                  <td>8 años</td>
-                  <td>Lun-Vie 8:00-16:00</td>
-                  <td><span class="badge bg-success">Activo</span></td>
-                  <td>
-                    <button class="btn btn-sm btn-warning me-1">Editar</button>
-                    <button class="btn btn-sm btn-danger">Eliminar</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Dra. Ana Gómez</td>
-                  <td>Pediatría</td>
-                  <td>67890-MD</td>
-                  <td>5 años</td>
-                  <td>Lun-Vie 9:00-15:00</td>
-                  <td><span class="badge bg-secondary">Inactivo</span></td>
-                  <td>
-                    <button class="btn btn-sm btn-warning me-1">Editar</button>
-                    <button class="btn btn-sm btn-danger">Eliminar</button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+        </header>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Contenido principal -->
+        <div class="content-wrapper">
+            
+            <!-- Panel lateral izquierdo -->
+            <aside class="sidebar-left">
+                <div class="photo-section">
+                    <div class="photo-container">
+                        <img src="doctor-placeholder.png" alt="Foto del médico" class="doctor-photo" id="doctorPhoto">
+                        <label for="fileInput" class="photo-upload-btn">
+                            <i class="bi bi-camera"></i>
+                        </label>
+                        <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                    </div>
+                </div>
+
+                <!-- Información del médico -->
+                <div class="info-section">
+                    <label class="form-label-custom">Información del Médico</label>
+                    <textarea class="form-control text-area-custom" rows="8" readonly>
+Dr. Juan Carlos García
+Especialidad: Cardiología
+Licencia: MED-2024-001
+Años de experiencia: 15
+Horario: Lunes a Viernes
+Teléfono: 2222-3333
+                    </textarea>
+                </div>
+            </aside>
+
+            <!-- Área central de formulario -->
+            <main class="main-content">
+                <h2 class="section-title">Médicos</h2>
+
+                <form class="medical-form">
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label-custom">ID</label>
+                            <input type="text" class="form-control input-custom" placeholder="Auto-generado" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label-custom">Nombres</label>
+                            <input type="text" class="form-control input-custom" placeholder="Ingrese nombres">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label-custom">Apellidos</label>
+                            <input type="text" class="form-control input-custom" placeholder="Ingrese apellidos">
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label-custom">DUI</label>
+                            <input type="text" class="form-control input-custom" placeholder="00000000-0">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label-custom">Experiencia</label>
+                            <input type="text" class="form-control input-custom" placeholder="Ej: 5 años en cardiología">
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label-custom">Residencia</label>
+                            <input type="text" class="form-control input-custom" placeholder="Dirección completa">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label-custom">ID Especialidad</label>
+                            <select class="form-select input-custom">
+                                <option selected>Seleccione una especialidad</option>
+                                <option value="1">1 - Cardiología</option>
+                                <option value="2">2 - Pediatría</option>
+                                <option value="3">3 - Medicina General</option>
+                                <option value="4">4 - Ginecología</option>
+                                <option value="5">5 - Traumatología</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label-custom">Número Telefónico</label>
+                            <input type="tel" class="form-control input-custom" placeholder="0000-0000">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label-custom">Correo Electrónico</label>
+                            <input type="email" class="form-control input-custom" placeholder="correo@ejemplo.com">
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label-custom">Número Telefónico de Responsable (Emergencia)</label>
+                            <input type="tel" class="form-control input-custom" placeholder="0000-0000">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label-custom">Estado</label>
+                            <select class="form-select input-custom">
+                                <option value="activo" selected>Activo</option>
+                                <option value="inactivo">Inactivo</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Botones de acción -->
+                    <div class="button-group">
+                        <button type="button" class="btn btn-action btn-save" title="Guardar">
+                            <i class="bi bi-floppy"></i>
+                        </button>
+                        <button type="button" class="btn btn-action btn-edit" title="Editar">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                        <button type="button" class="btn btn-action btn-delete" title="Eliminar">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                        <button type="button" class="btn btn-action btn-search" title="Buscar">
+                            <i class="bi bi-search"></i>
+                        </button>
+                        <button type="button" class="btn btn-action btn-clean" title="Limpiar">
+                            <i class="bi bi-eraser"></i>
+                        </button>
+                        <button type="button" class="btn btn-action btn-back" title="Volver a Citas">
+                            <i class="bi bi-arrow-left"></i>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Tabla de médicos registrados -->
+                <div class="table-section mt-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <label class="form-label-custom mb-0">Médicos Registrados</label>
+                        <div class="search-box">
+                            <input type="text" class="form-control input-custom" placeholder="Buscar médico...">
+                        </div>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-custom">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombres</th>
+                                    <th>Apellidos</th>
+                                    <th>DUI</th>
+                                    <th>Especialidad</th>
+                                    <th>Teléfono</th>
+                                    <th>Email</th>
+                                    <th>Estado</th>
+                                   
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>001</td>
+                                    <td>Juan Carlos</td>
+                                    <td>García Pérez</td>
+                                    <td>12345678-9</td>
+                                    <td>Cardiología</td>
+                                    <td>2222-3333</td>
+                                    <td>jgarcia@mail.com</td>
+                                    <td><span class="badge-active">Activo</span></td>
+                                   
+                                </tr>
+                                <tr>
+                                    <td>002</td>
+                                    <td>María Fernanda</td>
+                                    <td>López Martínez</td>
+                                    <td>98765432-1</td>
+                                    <td>Pediatría</td>
+                                    <td>2333-4444</td>
+                                    <td>mlopez@mail.com</td>
+                                    <td><span class="badge-active">Activo</span></td>
+                                    
+                                </tr>
+                                <tr>
+                                    <td>003</td>
+                                    <td>Carlos Alberto</td>
+                                    <td>Martínez Silva</td>
+                                    <td>55443322-7</td>
+                                    <td>Medicina General</td>
+                                    <td>2444-5555</td>
+                                    <td>cmartinez@mail.com</td>
+                                    <td><span class="badge-inactive">Inactivo</span></td>
+                                    
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Script para la foto -->
+    <script>
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    document.getElementById('doctorPhoto').src = event.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
 </body>
 </html>
