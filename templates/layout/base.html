@@ -80,6 +80,10 @@
                href="{{ url_for('main.perfiles_medicos') }}">
               <i class="bi bi-person-vcard"></i> Perfiles Médicos
             </a>
+            <a class="nav-link d-flex align-items-center gap-2 {% if request.path.startswith('/pacientes') %}active{% endif %}"
+               href="{{ url_for('main.pacientes') }}">
+              <i class="bi bi-person-vcard"></i> Pacientes
+            </a>
           </li>
         </ul>
       </nav>

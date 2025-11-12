@@ -1,0 +1,104 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Gestión de Pacientes{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pacientes.css') }}">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+  <h3 class="text-center mb-3">Registro de Pacientes</h3>
+
+  <!-- ALERTAS -->
+  <div id="alertContainer"></div>
+
+  <!-- FORMULARIO RESPONSIVE -->
+  <form id="pacienteForm">
+    <div class="row g-2">
+      <div class="col-12 col-md-3">
+        <label for="nombre">Nombre</label>
+        <input type="text" id="nombre" class="form-control" placeholder="Nombre" required>
+      </div>
+      <div class="col-12 col-md-2">
+        <label for="dui">DUI</label>
+        <input type="text" id="dui" class="form-control" placeholder="00000000-0" required pattern="^[0-9]{8}-[0-9]{1}$">
+      </div>
+      <div class="col-12 col-md-2">
+        <label for="fechaNacimiento">Fecha Nac.</label>
+        <input type="date" id="fechaNacimiento" class="form-control" required>
+      </div>
+      <div class="col-12 col-md-2">
+        <label for="telefono">Teléfono</label>
+        <input type="tel" id="telefono" class="form-control" placeholder="0000-0000" required pattern="^[0-9]{4}-[0-9]{4}$">
+      </div>
+      <div class="col-12 col-md-3">
+        <label for="correo">Correo</label>
+        <input type="email" id="correo" class="form-control" placeholder="ejemplo@correo.com" required>
+      </div>
+
+      <div class="col-12 col-md-2">
+        <label for="genero">Género</label>
+        <select id="genero" class="form-select" required>
+          <option value="">Seleccione...</option>
+          <option>Masculino</option>
+          <option>Femenino</option>
+        </select>
+      </div>
+      <div class="col-12 col-md-2">
+        <label for="estado">Estado</label>
+        <select id="estado" class="form-select">
+          <option>Activo</option>
+          <option>Inactivo</option>
+        </select>
+      </div>
+      <div class="col-12 col-md-4">
+        <label for="direccion">Dirección</label>
+        <input type="text" id="direccion" class="form-control" placeholder="Dirección">
+      </div>
+      <div class="col-12 col-md-4">
+        <label for="observaciones">Observaciones</label>
+        <input type="text" id="observaciones" class="form-control" placeholder="Observaciones">
+      </div>
+    </div>
+
+    <!-- BOTONES -->
+    <div class="form-buttons mt-2 text-end">
+      <button type="submit" class="btn btn-primary">
+        <i class="bi bi-save"></i> Guardar
+      </button>
+      <button type="reset" class="btn btn-secondary">
+        <i class="bi bi-x-circle"></i> Limpiar
+      </button>
+    </div>
+  </form>
+</div>
+
+<!-- TABLA DE PACIENTES RESPONSIVE -->
+<div class="table-container mt-3">
+  <h5 class="text-center mb-2">Pacientes Registrados</h5>
+  <div class="table-responsive">
+    <table class="table table-striped table-hover align-middle">
+      <thead class="table-header">
+        <tr>
+          <th>Nombre</th>
+          <th>DUI</th>
+          <th>Fecha Nac.</th>
+          <th>Teléfono</th>
+          <th>Correo</th>
+          <th>Género</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="tablaPacientesBody">
+        <!-- Las filas de pacientes se renderizarán aquí dinámicamente -->
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ url_for('static', filename='js/pacientes.js') }}"></script>
+{% endblock %}

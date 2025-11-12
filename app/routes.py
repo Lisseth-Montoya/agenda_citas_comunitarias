@@ -26,3 +26,9 @@ def citas_registrar():
 def perfiles_medicos():
     """Módulo de Perfiles Médicos"""
     return render_template("modulos/PerfilesMedicos/P-medicos.html", title="Perfiles Médicos")
+
+# ===================== GESTION PACIENTES =====================
+@bp.route("/pacientes")
+def pacientes():
+    """Módulo de Gestion Pacientes"""
+    return render_template("modulos/Pacientes/Pacientes.html", title="Pacientes")
