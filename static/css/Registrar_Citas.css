@@ -1,0 +1,66 @@
+/* === ESTILOS GLOBALES DEL FORMULARIO === */
+body {
+  background-color: #ffffff;
+  color: #333333;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.Titulo_1 {
+  color: #0a9a9e;
+  font-weight: 700;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* === ETIQUETAS Y CAMPOS === */
+label {
+  font-weight: 600;
+  color: #333333;
+}
+
+.form-control, .form-select {
+  border: 1px solid #aaaaaa;
+  border-radius: 8px;
+  box-shadow: none;
+  transition: all 0.2s ease-in-out;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: #0a9a9e;
+  box-shadow: 0 0 0 0.2rem rgba(10, 154, 158, 0.25);
+}
+
+/* === BOTONES PRINCIPALES === */
+.btn-primary {
+  background-color: #0a9a9e;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #0cb3b7;
+}
+
+/* === TITULOS Y CABECERAS === */
+.card-header {
+  background-color: #0a9a9e;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* === SEPARACIÓN ENTRE CAMPOS === */
+.mb-3 {
+  margin-bottom: 1.2rem !important;
+}
+
+/* === PLACEHOLDERS Y TEXTOS GRISES === */
+::placeholder {
+  color: #aaaaaa;
+}
+
+#dui {
+  letter-spacing: 1px;
+}
+
+#dui::placeholder {
+  color: #aaaaaa;
+}

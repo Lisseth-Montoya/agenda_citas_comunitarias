@@ -1,5 +1,5 @@
 # app/routes.py
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, redirect, url_for
 
 bp = Blueprint("main", __name__)
 
@@ -8,18 +8,32 @@ bp = Blueprint("main", __name__)
 def index():
     return render_template("layout/index.html", title="Inicio")
 
-# ===================== AGENDA =====================
+# ===================== AGENDA (canónica en minúsculas) =====================
 @bp.route("/agenda")
 def agenda():
-    return render_template("layout/index.html", title="Agenda")
+    # Si ya tienes la vista real, úsala. Si no existe aún, cambia a layout/index.html
+    return render_template("Modules/Gestionar_Citas/Agenda.html", title="Agenda")
 
 @bp.route("/citas/registrar")
 def citas_registrar():
-    return render_template("layout/index.html", title="Registrar Citas")
+    return render_template("Modules/Gestionar_Citas/Registrar_Citas.html", title="Registrar Citas")
 
 @bp.route("/agenda/semanal")
 def agenda_semanal():
-    return render_template("layout/index.html", title="Agenda Semanal")
+    return render_template("Modules/Gestionar_Citas/Agenda_semanal.html", title="Agenda Semanal")
+
+# ===== Rutas legacy (mayúsculas) → redirigen a las canónicas =====
+@bp.route("/Agenda")
+def agenda_legacy():
+    return redirect(url_for("main.agenda"), code=301)
+
+@bp.route("/Registrar_Citas")
+def citas_registrar_legacy():
+    return redirect(url_for("main.citas_registrar"), code=301)
+
+@bp.route("/Agenda_semanal")
+def agenda_semanal_legacy():
+    return redirect(url_for("main.agenda_semanal"), code=301)
 
 # ===================== PERFILES MÉDICOS =====================
 @bp.route("/perfiles-medicos")
