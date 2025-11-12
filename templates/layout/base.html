@@ -106,6 +106,13 @@
               <i class="bi bi-people"></i> Pacientes
             </a>
           </li>
+          <li class="nav-item">
+            <a
+              class="nav-link d-flex align-items-center gap-2 {% if request.path.startswith('/especialidades') %}active{% endif %}"
+              href="{{ url_for('main.especialidades') }}">
+              <i class="bi bi-collection"></i> Especialidades
+            </a>
+          </li>
         </ul>
       </nav>
     </div>

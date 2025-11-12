@@ -6,20 +6,23 @@ bp = Blueprint("main", __name__)
 # ===================== RUTA PRINCIPAL =====================
 @bp.route("/")
 def index():
+    """Página de inicio o dashboard"""
     return render_template("layout/index.html", title="Inicio")
 
-# ===================== AGENDA (canónica en minúsculas) =====================
+# ===================== AGENDA =====================
 @bp.route("/agenda")
 def agenda():
-    # Si ya tienes la vista real, úsala. Si no existe aún, cambia a layout/index.html
+    """Vista principal de Agenda"""
     return render_template("Modules/Gestionar_Citas/Agenda.html", title="Agenda")
 
 @bp.route("/citas/registrar")
 def citas_registrar():
+    """Formulario de registro de citas"""
     return render_template("Modules/Gestionar_Citas/Registrar_Citas.html", title="Registrar Citas")
 
 @bp.route("/agenda/semanal")
 def agenda_semanal():
+    """Agenda semanal"""
     return render_template("Modules/Gestionar_Citas/Agenda_semanal.html", title="Agenda Semanal")
 
 # ===== Rutas legacy (mayúsculas) → redirigen a las canónicas =====
@@ -38,6 +41,7 @@ def agenda_semanal_legacy():
 # ===================== PERFILES MÉDICOS =====================
 @bp.route("/perfiles-medicos")
 def perfiles_medicos():
+    """Módulo de Perfiles Médicos"""
     return render_template("modulos/PerfilesMedicos/P-medicos.html", title="Perfiles Médicos")
 
 # ===================== GESTIÓN PACIENTES =====================
@@ -49,9 +53,11 @@ def pacientes():
 # ===================== ESPECIALIDADES =====================
 @bp.route("/especialidades")
 def especialidades():
-    return render_template("layout/index.html", title="Especialidades")
+    """Módulo de Especialidades"""
+    return render_template("modulos/especialidades/especialidades.html", title="Especialidades")
 
 # ===================== REPORTES =====================
 @bp.route("/reportes")
 def reportes():
+    """Sección de reportes"""
     return render_template("layout/index.html", title="Reportes")
