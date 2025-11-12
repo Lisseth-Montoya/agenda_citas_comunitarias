@@ -1,28 +1,36 @@
-# app/routes.py
 from flask import Blueprint, render_template
 
-# Blueprint principal
 bp = Blueprint("main", __name__)
 
-# ===================== RUTA PRINCIPAL =====================
 @bp.route("/")
 def index():
-    """Página principal (dashboard o portada del sistema)"""
-    return render_template("layout/index.html", title="Inicio")
+    return render_template("layout/index.html")
 
-# ===================== AGENDA =====================
+# Placeholders del sidebar (todos apuntan al mismo index por ahora)
 @bp.route("/agenda")
 def agenda():
-    """Vista principal de Agenda"""
-    return render_template("layout/index.html", title="Agenda")
+    return render_template("layout/index.html", page_title="Agenda")
 
 @bp.route("/citas/registrar")
 def citas_registrar():
-    """Formulario de registro de citas"""
-    return render_template("layout/index.html", title="Registrar Citas")
+    return render_template("layout/index.html", page_title="Registrar Citas")
 
-# ===================== PERFILES MÉDICOS =====================
+@bp.route("/agenda/semanal")
+def agenda_semanal():
+    return render_template("layout/index.html", page_title="Agenda Semanal")
+
+@bp.route("/pacientes")
+def pacientes():
+    return render_template("layout/index.html", page_title="Pacientes")
+
 @bp.route("/perfiles-medicos")
 def perfiles_medicos():
-    """Módulo de Perfiles Médicos"""
+    
     return render_template("modulos/PerfilesMedicos/P-medicos.html", title="Perfiles Médicos")
+@bp.route("/especialidades")
+def especialidades():
+    return render_template("layout/index.html", page_title="Especialidades")
+
+@bp.route("/reportes")
+def reportes():
+    return render_template("layout/index.html", page_title="Reportes")
