@@ -1,3 +1,4 @@
+// --- VARIABLES PRINCIPALES ---
 let pacientes = [];
 let pacienteSeleccionadoIndex = null;
 
@@ -5,22 +6,22 @@ const form = document.getElementById('pacienteForm');
 const tablaBody = document.getElementById('tablaPacientesBody');
 const alertContainer = document.getElementById('alertContainer');
 
-// --- Funciones Principales ---
+// --- FUNCIONES PRINCIPALES ---
 
-// 1. Manejar el envío del formulario (Guardar/Actualizar)
+// 1. Manejar envío del formulario (Guardar/Actualizar)
 form.addEventListener('submit', (e) => {
   e.preventDefault();
 
   const nuevoPaciente = {
-    nombre: document.getElementById('nombre').value,
-    dui: document.getElementById('dui').value,
+    nombre: document.getElementById('nombre').value.trim(),
+    dui: document.getElementById('dui').value.trim(),
     fechaNacimiento: document.getElementById('fechaNacimiento').value,
-    telefono: document.getElementById('telefono').value,
-    correo: document.getElementById('correo').value,
-    direccion: document.getElementById('direccion').value,
+    telefono: document.getElementById('telefono').value.trim(),
+    correo: document.getElementById('correo').value.trim(),
+    direccion: document.getElementById('direccion').value.trim(),
     genero: document.getElementById('genero').value,
     estado: document.getElementById('estado').value,
-    observaciones: document.getElementById('observaciones').value
+    observaciones: document.getElementById('observaciones').value.trim()
   };
 
   if (pacienteSeleccionadoIndex !== null) {
@@ -36,9 +37,10 @@ form.addEventListener('submit', (e) => {
   renderTabla();
 });
 
-// 2. Renderizar la tabla (Dibuja todas las filas desde cero)
+// 2. Renderizar la tabla
 function renderTabla() {
   tablaBody.innerHTML = '';
+
   pacientes.forEach((paciente, index) => {
     const tr = document.createElement('tr');
 
@@ -60,12 +62,14 @@ function renderTabla() {
       </td>
     `;
 
+    // Botón Editar
     tr.querySelector('.btn-editar').addEventListener('click', (e) => {
       e.stopPropagation();
       pacienteSeleccionadoIndex = index;
       cargarPacienteEnFormulario(paciente);
     });
 
+    // Botón Eliminar
     tr.querySelector('.btn-eliminar').addEventListener('click', (e) => {
       e.stopPropagation();
       if (confirm('¿Desea eliminar este paciente?')) {
@@ -80,7 +84,7 @@ function renderTabla() {
   });
 }
 
-// 3. Cargar datos en el formulario para edición
+// 3. Cargar datos en formulario para edición
 function cargarPacienteEnFormulario(paciente) {
   document.getElementById('nombre').value = paciente.nombre;
   document.getElementById('dui').value = paciente.dui;
@@ -103,7 +107,12 @@ function showAlert(mensaje, tipo) {
   `;
 }
 
-// --- Inicialización al cargar la página ---
+// --- INICIALIZACIÓN ---
 document.addEventListener('DOMContentLoaded', () => {
+  if (!form || !tablaBody || !alertContainer) {
+    console.error('Error: Faltan elementos HTML necesarios.');
+    return;
+  }
+
   renderTabla();
 });
