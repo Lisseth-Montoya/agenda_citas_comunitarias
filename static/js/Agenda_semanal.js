@@ -1,3 +1,4 @@
+// Agenda_semanal.js
 const diasSemana = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
 
 function startOfWeek(date) {
@@ -8,11 +9,13 @@ function startOfWeek(date) {
   d.setHours(0,0,0,0);
   return d;
 }
+
 function addDays(date, n) {
   const r = new Date(date);
   r.setDate(r.getDate() + n);
   return r;
 }
+
 function formatHeaderLabel(d) {
   return `${diasSemana[d.getDay()]} ${d.getDate()}`;
 }
@@ -22,14 +25,26 @@ document.addEventListener('DOMContentLoaded', () => {
   const cuerpo = document.getElementById('cuerpoAgenda');
   const fechaInput = document.getElementById('fechaSemana');
   const btnHoy = document.getElementById('btnHoy');
+  const filtroMedico = document.getElementById('filtroMedico');
 
+  // set hoy por defecto
   const hoy = new Date();
-  fechaInput.valueAsDate = hoy;
+  if (fechaInput) {
+    fechaInput.valueAsDate = hoy;
+    // bloquear domingos
+    fechaInput.addEventListener('input', () => {
+      const d = new Date(fechaInput.value);
+      if (d.getDay() === 0) {
+        alert('No se pueden seleccionar domingos.');
+        fechaInput.valueAsDate = hoy;
+      }
+    });
+  }
 
   function renderWeek(baseDate) {
     const monday = startOfWeek(baseDate);
 
-    // Generar cabecera
+    // Header
     headerRow.innerHTML = '';
     const thHora = document.createElement('th');
     thHora.textContent = 'Hora';
@@ -39,13 +54,13 @@ document.addEventListener('DOMContentLoaded', () => {
       const d = addDays(monday, i);
       const th = document.createElement('th');
       th.textContent = formatHeaderLabel(d);
+      th.dataset.date = d.toISOString().slice(0,10);
       headerRow.appendChild(th);
     }
 
-    // Generar filas
+    // Filas de horario (7:00 a 19:30)
     cuerpo.innerHTML = '';
-    let hour = 7;
-    let minutes = 0;
+    let hour = 7, minutes = 0;
     while (hour < 20) {
       const tr = document.createElement('tr');
       const tdHora = document.createElement('td');
@@ -59,6 +74,15 @@ document.addEventListener('DOMContentLoaded', () => {
         slot.className = 'slot';
         slot.dataset.dayIndex = d;
         slot.dataset.time = `${String(hour).padStart(2,'0')}:${String(minutes).padStart(2,'0')}`;
+
+        // crear tres bloques (uno por médico)
+        for (let i = 1; i <= 3; i++) {
+          const bloque = document.createElement('div');
+          bloque.className = `bloque-cita medico-${i}`;
+          bloque.textContent = ''; // vacío hasta que se llene con cita
+          slot.appendChild(bloque);
+        }
+
         td.appendChild(slot);
         tr.appendChild(td);
       }
@@ -68,55 +92,66 @@ document.addEventListener('DOMContentLoaded', () => {
       if (minutes === 60) { minutes = 0; hour++; }
     }
 
-    // 🔹 Mostrar citas guardadas
-    mostrarCitasEnSemana(monday);
+    placeCitasInWeek(monday);
   }
 
-  // 🔹 Cargar citas desde localStorage y mostrarlas en las celdas correctas
-  function mostrarCitasEnSemana(monday) {
-    const citas = JSON.parse(localStorage.getItem("citas")) || [];
+  function placeCitasInWeek(monday) {
+    const citas = JSON.parse(localStorage.getItem('citas') || '[]');
+    document.querySelectorAll('.bloque-cita').forEach(b => {
+      b.textContent = '';
+      b.removeEventListener('click', b.onclick);
+    });
 
     citas.forEach(cita => {
-      const fechaCita = new Date(cita.fecha + "T00:00:00");
-      const diff = Math.floor((fechaCita - monday) / (1000 * 60 * 60 * 24));
-      if (diff >= 0 && diff < 6) {
-        // Buscar la celda de ese día y hora
-        const slot = document.querySelector(`.slot[data-day-index="${diff}"][data-time="${cita.hora}"]`);
+      const fechaCita = new Date(cita.fecha + 'T00:00:00');
+      const diffDays = Math.round((fechaCita - monday) / (1000*60*60*24));
+      if (diffDays >= 0 && diffDays < 6) {
+        const selector = `.slot[data-day-index="${diffDays}"][data-time="${cita.hora}"]`;
+        const slot = document.querySelector(selector);
         if (slot) {
-          // Crear una tarjeta dentro de la celda
-          const card = document.createElement('div');
-          card.className = 'card bg-info text-white p-1 small mb-1';
-          card.style.cursor = 'pointer';
-          card.innerHTML = `
-            <strong>${cita.paciente}</strong><br>
-            <span>${cita.profesional}</span>
-          `;
-          // Cuando se hace clic, muestra alerta tipo "Ver"
-          card.addEventListener('click', () => {
-            alert(
-              `Cita Médica\n\n` +
-              `Paciente: ${cita.paciente}\n` +
-              `Profesional: ${cita.profesional}\n` +
-              `Fecha: ${cita.fecha}\n` +
-              `Hora: ${cita.hora}\n` +
-              `Estado: ${cita.estado}`
-            );
-          });
-          slot.appendChild(card);
+          // Asignar bloque según profesional
+          let bloque;
+          if (cita.profesional.includes('Juan')) bloque = slot.querySelector('.medico-1');
+          else if (cita.profesional.includes('María')) bloque = slot.querySelector('.medico-2');
+          else bloque = slot.querySelector('.medico-3');
+
+          if (bloque) {
+            bloque.textContent = cita.paciente;
+            bloque.addEventListener('click', (e) => {
+              e.stopPropagation();
+              alert(
+                `Cita:\nPaciente: ${cita.paciente}\nProfesional: ${cita.profesional}\nFecha: ${cita.fecha}\nHora: ${cita.hora}\nEstado: ${cita.estado}`
+              );
+            });
+          }
         }
       }
     });
   }
 
+  // Render inicial
   renderWeek(hoy);
 
-  fechaInput.addEventListener('change', (e) => {
-    const d = new Date(e.target.value + 'T00:00:00');
-    renderWeek(d);
-  });
+  // Cambiar semana
+  if (fechaInput) {
+    fechaInput.addEventListener('change', (e) => {
+      const d = new Date(e.target.value + 'T00:00:00');
+      renderWeek(d);
+    });
+  }
 
-  btnHoy.addEventListener('click', () => {
-    fechaInput.valueAsDate = new Date();
-    renderWeek(new Date());
+  if (btnHoy) {
+    btnHoy.addEventListener('click', () => {
+      fechaInput.valueAsDate = new Date();
+      renderWeek(new Date());
+    });
+  }
+
+  // Actualizar cuando se guarde una cita
+  window.addEventListener('citas:updated', () => {
+    const d = (fechaInput && fechaInput.value)
+      ? new Date(fechaInput.value + 'T00:00:00')
+      : new Date();
+    renderWeek(d);
   });
 });

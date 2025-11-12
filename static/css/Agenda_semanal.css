@@ -1,13 +1,16 @@
+/* ======= ESTILOS GENERALES ======= */
 body {
   background-color: #f8f9fa;
   font-family: Arial, sans-serif;
   color: #333;
 }
 
-/* Encabezado */
-header { background: transparent; }
+/* ======= ENCABEZADO ======= */
+header { 
+  background: transparent; 
+}
 
-/* Tabla */
+/* ======= TABLA PRINCIPAL ======= */
 .table {
   border-collapse: separate;
   border-spacing: 0;
@@ -20,75 +23,97 @@ header { background: transparent; }
   min-width: 110px;
 }
 
-/* Cabecera con color suave */
 .table thead th {
-  background: #b4d9ff; /* tu header */
+  background: #b4d9ff;
   font-weight: 600;
   position: sticky;
   top: 0;
   z-index: 2;
+  text-align: center;
 }
 
-/* Alternado blanco / gris por fila (se aplica independientemente de cómo se generen) */
-#cuerpoAgenda tr:nth-child(odd) {
-  background-color: #ffffff;
-}
-#cuerpoAgenda tr:nth-child(even) {
-  background-color: #e9ecef; /* gris suave */
-}
+/* Alternado blanco / gris */
+#cuerpoAgenda tr:nth-child(odd) { background-color: #ffffff; }
+#cuerpoAgenda tr:nth-child(even) { background-color: #e9ecef; }
 
-/* Separador izquierdo (col Hora) */
-.table td:first-child, .table th:first-child {
+/* Columna de hora */
+.table td:first-child, 
+.table th:first-child {
   background: #f1f3f4;
   width: 90px;
   font-weight: 600;
 }
 
-/* Hover ligero */
 #cuerpoAgenda tr:hover {
   background-color: rgba(10,154,158,0.08);
 }
 
-/* Texto de la hora */
-.hour-cell { text-align: left; padding-left: .8rem; }
-
-/* Celdas vacías listas para eventos */
-.table td > .slot {
-  display: block;
-  min-height: 44px;
+.hour-cell { 
+  text-align: left; 
+  padding-left: .8rem; 
 }
 
-/* Media queries */
-@media (max-width: 768px) {
-  .table th, .table td { font-size: .85rem; padding: .4rem .3rem; min-width: 80px; }
-}
-
-
-/* --- Altura de las filas --- */
+/* ======= CELDAS Y CONTENEDORES ======= */
 #cuerpoAgenda td {
-  height: 70px; /* Puedes ajustar a 80px o 100px si lo prefieres */
+  height: 70px;
   position: relative;
+  padding: 0;
 }
 
-/* --- Estilo de la "carta" (cita) dentro de una celda --- */
+/* Contenedor de los bloques dentro de cada celda */
+.table td > .slot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  padding: 5px; /* separación con el borde de la celda */
+  box-sizing: border-box;
+}
+
+/* ======= BLOQUES DE CITAS ======= */
 .cita-card {
-  background-color: #007bff; /* Azul Bootstrap */
+  background-color: #007bff;
   color: white;
   border-radius: 8px;
-  padding: 6px 8px;
-  font-size: 0.85rem;
+  padding: 10px;
+  font-size: 0.9rem;
   text-align: center;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   box-shadow: 0 2px 4px rgba(0,0,0,0.15);
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 85%;
+  width: calc(100% - 10px); /* Deja 5px de margen a los lados */
+  height: calc(100% - 10px); /* Deja 5px de margen arriba y abajo */
+  margin: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .cita-card:hover {
   background-color: #0056b3;
-  transform: translate(-50%, -50%) scale(1.05);
+  transform: scale(1.03);
+}
+
+
+/* Colores por médico */
+.medico-1 { background-color: #1E88E5; } /* Azul */
+.medico-2 { background-color: #FB8C00; } /* Naranja */
+.medico-3 { background-color: #43A047; } /* Verde */
+
+/* ======= RESPONSIVE ======= */
+@media (max-width: 768px) {
+  .table th, .table td { 
+    font-size: .8rem; 
+    padding: .4rem .3rem; 
+    min-width: 80px; 
+  }
+  .bloque-cita {
+    font-size: 0.7rem;
+  }
+}
+
+/* ======= FILTRO DE MÉDICO ======= */
+#filtroMedico {
+  margin-left: 10px;
+  margin-right: 10px;
 }
