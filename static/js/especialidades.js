@@ -1,221 +1,111 @@
-
-const especialidades = [
-  { id: 'cardio', nombre: 'Cardiología' },
-  { id: 'derma', nombre: 'Dermatología' },
-  { id: 'pedi', nombre: 'Pediatría' },
-];
-
-const profesionales = [
-  { id: 'p1', nombre: 'Dra. María Pérez', especialidad: 'cardio' },
-  { id: 'p2', nombre: 'Dr. José López', especialidad: 'derma' },
-  { id: 'p3', nombre: 'Dra. Ana Ruiz', especialidad: 'pedi' },
-];
-
-let citas = [
-  { id: 1, especialidad: 'cardio', profesional: 'p1', paciente: 'Juan López', fecha: addDays(new Date(), 0), hora: '09:00', duracion: 30, estado: 'confirmada', notas: 'Revisión anual' },
-  { id: 2, especialidad: 'derma', profesional: 'p2', paciente: 'María Gómez', fecha: addDays(new Date(), 1), hora: '11:00', duracion: 20, estado: 'pendiente', notas: '' },
-  { id: 3, especialidad: 'pedi', profesional: 'p3', paciente: 'Familia Rivera', fecha: addDays(new Date(), 2), hora: '14:00', duracion: 30, estado: 'confirmada', notas: 'Vacunación' },
-];
-
-function addDays(d, days) { const r = new Date(d); r.setDate(r.getDate() + days); return r; }
-function formatDate(d) { const dt = new Date(d); return dt.toLocaleDateString(); }
-
 document.addEventListener('DOMContentLoaded', () => {
-  poblarSelects();
-  renderCalendar();
-  renderListado();
-  setupFormValidation();
-});
+    const form = document.getElementById('formEspecialidad');
+    const tbody = document.getElementById('tbodyEspecialidades');
+    const fechaInput = document.getElementById('fechaRegistro');
+    const alerta = document.getElementById('alerta');
+    const btnLimpiar = document.getElementById('btnLimpiar');
 
-function poblarSelects() {
-  const selEsp = document.getElementById('especialidad');
-  const filterEsp = document.getElementById('filterEspecialidad');
-  especialidades.forEach(e => {
-    const opt = document.createElement('option'); opt.value = e.id; opt.textContent = e.nombre; selEsp.appendChild(opt);
-    const opt2 = opt.cloneNode(true); filterEsp.appendChild(opt2);
-  });
+    let especialidades = [];
+    let editIndex = null;
 
-  const selProf = document.getElementById('profesional');
-  const filterProf = document.getElementById('filterProfesional');
-  profesionales.forEach(p => {
-    const opt = document.createElement('option'); opt.value = p.id; opt.textContent = p.nombre; selProf.appendChild(opt);
-    const opt2 = opt.cloneNode(true); filterProf.appendChild(opt2);
-  });
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
 
-  // Bind filtros
-  document.getElementById('filterEspecialidad').addEventListener('change', renderCalendar);
-  document.getElementById('filterProfesional').addEventListener('change', renderCalendar);
-  document.getElementById('filterEstado').addEventListener('change', renderCalendar);
-  document.getElementById('btnLimpiarFiltros').addEventListener('click', () => {
-    document.getElementById('filterEspecialidad').value = '';
-    document.getElementById('filterProfesional').value = '';
-    document.getElementById('filterEstado').value = '';
-    renderCalendar();
-  });
-}
+        const nombre = document.getElementById('nombre').value.trim();
+        const descripcion = document.getElementById('descripcion').value.trim();
+        const duracion = document.getElementById('duracion').value.trim();
+        const precio = document.getElementById('precio').value.trim();
+        const estado = document.getElementById('estado').value;
 
-let startOfWeek = new Date();
-function renderCalendar() {
-  const grid = document.getElementById('calendarGrid');
-  grid.innerHTML = '';
-  const weekLabel = document.getElementById('weekLabel');
-  weekLabel.textContent = `Semana desde ${formatDate(startOfWeek)}`;
+        if (!nombre || !descripcion || !duracion || !precio) {
+            alert('Por favor complete todos los campos obligatorios.');
+            return;
+        }
 
-  const fEsp = document.getElementById('filterEspecialidad').value;
-  const fProf = document.getElementById('filterProfesional').value;
-  const fEstado = document.getElementById('filterEstado').value;
+        const fechaActual = new Date().toISOString().split('T')[0]; // yyyy-mm-dd
 
-  for (let i = 0; i < 7; i++) {
-    const day = addDays(startOfWeek, i);
-    const dayBox = document.createElement('article');
-    dayBox.className = 'calendar-day';
-    dayBox.setAttribute('role', 'listitem');
-    dayBox.innerHTML = `<h3 class="h6">${day.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' })}</h3>`;
+        const nueva = {
+            nombre,
+            descripcion,
+            duracion,
+            precio,
+            estado,
+            fechaRegistro: editIndex === null ? fechaActual : especialidades[editIndex].fechaRegistro
+        };
 
-    const citasDelDia = citas.filter(c => new Date(c.fecha).toDateString() === day.toDateString())
-      .filter(c => fEsp ? c.especialidad === fEsp : true)
-      .filter(c => fProf ? c.profesional === fProf : true)
-      .filter(c => fEstado ? c.estado === fEstado : true);
+        if (editIndex === null) {
+            especialidades.push(nueva);
+            mostrarAlerta();
+        } else {
+            especialidades[editIndex] = nueva;
+            editIndex = null;
+        }
 
-    citasDelDia.forEach(c => {
-      const prof = profesionales.find(p => p.id === c.profesional);
-      const badge = document.createElement('button');
-      badge.type = 'button';
-      badge.className = `appointment-badge appt-status-${c.estado}`;
-      badge.setAttribute('aria-label', `${c.paciente} con ${prof ? prof.nombre : ''} a las ${c.hora}`);
-      badge.textContent = `${c.hora} • ${c.paciente}`;
-      badge.addEventListener('click', () => abrirDetalle(c.id));
-      dayBox.appendChild(badge);
+        form.reset();
+        fechaInput.value = '';
+        renderTabla();
+        document.querySelector('button[type="submit"]').innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Guardar';
     });
 
-    grid.appendChild(dayBox);
-  }
-
-  const hoy = new Date();
-  const resumen = citas.filter(c => new Date(c.fecha).toDateString() === hoy.toDateString()).length;
-  document.getElementById('todaySummary').textContent = `${resumen} citas hoy`;
-}
-
-function renderListado() {
-  const tbody = document.querySelector('#tablaCitas tbody');
-  tbody.innerHTML = '';
-  citas.forEach((c, idx) => {
-    const esp = especialidades.find(e => e.id === c.especialidad)?.nombre || c.especialidad;
-    const prof = profesionales.find(p => p.id === c.profesional)?.nombre || c.profesional;
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td>${idx + 1}</td>
-      <td>${esp}</td>
-      <td>${prof}</td>
-      <td>${c.paciente}</td>
-      <td>${new Date(c.fecha).toLocaleDateString()}</td>
-      <td>${c.hora}</td>
-      <td>${c.duracion} min</td>
-      <td>${c.estado}</td>
-      <td>
-        <button class="btn btn-sm btn-outline-primary" onclick="abrirDetalle(${c.id})">Ver</button>
-        <button class="btn btn-sm btn-outline-secondary" onclick="editarCita(${c.id})">Editar</button>
-      </td>
-    `;
-    tbody.appendChild(tr);
-  });
-}
-
-function abrirDetalle(id) {
-  const c = citas.find(x => x.id === id);
-  if (!c) return;
-  document.getElementById('d_especialidad').textContent = especialidades.find(e => e.id === c.especialidad)?.nombre;
-  document.getElementById('d_profesional').textContent = profesionales.find(p => p.id === c.profesional)?.nombre;
-  document.getElementById('d_paciente').textContent = c.paciente;
-  document.getElementById('d_fecha_hora').textContent = `${new Date(c.fecha).toLocaleDateString()} ${c.hora}`;
-  document.getElementById('d_duracion').textContent = `${c.duracion} min`;
-  document.getElementById('d_estado').textContent = c.estado;
-  document.getElementById('d_notas').textContent = c.notas || '-';
-
-  const modal = new bootstrap.Modal(document.getElementById('modalDetalle'));
-  modal.show();
-
-  document.getElementById('btnReprogramar').onclick = () => {
-    modal.hide();
-    editarCita(id);
-    const modalC = new bootstrap.Modal(document.getElementById('modalCita'));
-    modalC.show();
-  };
-
-  document.getElementById('btnCancelarCita').onclick = () => {
-    if (confirm('¿Desea cancelar esta cita?')) {
-      c.estado = 'cancelada';
-      renderCalendar();
-      renderListado();
-      modal.hide();
+    function renderTabla() {
+        tbody.innerHTML = '';
+        especialidades.forEach((esp, index) => {
+            const fila = document.createElement('tr');
+            fila.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${esp.nombre}</td>
+                <td>${esp.descripcion}</td>
+                <td>${esp.duracion} min</td>
+                <td>$${parseFloat(esp.precio).toFixed(2)}</td>
+                <td>
+                    <span class="badge ${esp.estado === 'Activo' ? 'bg-success' : 'bg-secondary'}">${esp.estado}</span>
+                </td>
+                <td>${esp.fechaRegistro}</td>
+                <td>
+                    <button class="btn btn-warning btn-sm me-2" onclick="editar(${index})">
+                        <i class="fa-solid fa-pen-to-square"></i> Editar
+                    </button>
+                    <button class="btn btn-danger btn-sm" onclick="eliminar(${index})">
+                        <i class="fa-solid fa-trash"></i> Eliminar
+                    </button>
+                </td>
+            `;
+            tbody.appendChild(fila);
+        });
     }
-  };
-}
 
-function editarCita(id) {
-  const c = citas.find(x => x.id === id);
-  if (!c) return;
-  document.getElementById('modalCitaLabel').textContent = 'Editar cita';
-  document.getElementById('citaId').value = c.id;
-  document.getElementById('especialidad').value = c.especialidad;
-  document.getElementById('profesional').value = c.profesional;
-  document.getElementById('paciente').value = c.paciente;
-  document.getElementById('fecha').valueAsDate = new Date(c.fecha);
-  document.getElementById('hora').value = c.hora;
-  document.getElementById('duracion').value = c.duracion;
-  document.getElementById('estado').value = c.estado;
-  document.getElementById('notas').value = c.notas;
+    window.editar = (index) => {
+        const esp = especialidades[index];
+        document.getElementById('nombre').value = esp.nombre;
+        document.getElementById('descripcion').value = esp.descripcion;
+        document.getElementById('duracion').value = esp.duracion;
+        document.getElementById('precio').value = esp.precio;
+        document.getElementById('estado').value = esp.estado;
+        fechaInput.value = esp.fechaRegistro;
+        editIndex = index;
+        document.querySelector('button[type="submit"]').innerHTML = '<i class="fa-solid fa-rotate"></i> Actualizar';
+    };
 
-  const modal = new bootstrap.Modal(document.getElementById('modalCita'));
-  modal.show();
-}
+    window.eliminar = (index) => {
+        if (confirm('¿Desea eliminar esta especialidad?')) {
+            especialidades.splice(index, 1);
+            renderTabla();
+        }
+    };
 
-document.getElementById('formCita').addEventListener('submit', function(e) {
-  e.preventDefault();
-  if (!this.checkValidity()) { this.classList.add('was-validated'); return; }
+    btnLimpiar.addEventListener('click', () => {
+        form.reset();
+        fechaInput.value = '';
+        editIndex = null;
+        document.querySelector('button[type="submit"]').innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Guardar';
+    });
 
-  const id = document.getElementById('citaId').value;
-  const data = {
-    id: id ? parseInt(id, 10) : (citas.length ? Math.max(...citas.map(x => x.id)) + 1 : 1),
-    especialidad: document.getElementById('especialidad').value,
-    profesional: document.getElementById('profesional').value,
-    paciente: document.getElementById('paciente').value.trim(),
-    fecha: document.getElementById('fecha').value,
-    hora: document.getElementById('hora').value,
-    duracion: parseInt(document.getElementById('duracion').value || '30', 10),
-    estado: document.getElementById('estado').value,
-    notas: document.getElementById('notas').value.trim(),
-  };
-
-  if (id) {
-    const idx = citas.findIndex(x => x.id === data.id);
-    citas[idx] = data;
-  } else {
-    citas.push(data);
-  }
-
-  this.reset(); this.classList.remove('was-validated'); document.getElementById('citaId').value = '';
-  const modal = bootstrap.Modal.getInstance(document.getElementById('modalCita'));
-  modal.hide();
-  renderCalendar();
-  renderListado();
-});
-
-function setupFormValidation() {
-  const form = document.getElementById('formCita');
-  form.addEventListener('input', () => {
-    if (form.classList.contains('was-validated')) {
-      form.reportValidity();
+    function mostrarAlerta() {
+        alerta.classList.remove('d-none');
+        setTimeout(() => {
+            alerta.classList.add('d-none');
+        }, 3000);
     }
-  });
-}
 
-document.getElementById('toggleView').addEventListener('click', () => {
-  const cal = document.querySelector('section[aria-labelledby="calTitle"]');
-  const list = document.getElementById('listado');
-  cal.classList.toggle('visually-hidden');
-  list.classList.toggle('visually-hidden');
+    window.cerrarAlerta = () => alerta.classList.add('d-none');
 });
-
-document.getElementById('prevWeek').addEventListener('click', () => { startOfWeek.setDate(startOfWeek.getDate() - 7); renderCalendar(); });
-document.getElementById('nextWeek').addEventListener('click', () => { startOfWeek.setDate(startOfWeek.getDate() + 7); renderCalendar(); });
