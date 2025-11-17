@@ -2,9 +2,8 @@
 
 {% block title %}Gestión de Pacientes{% endblock %}
 
-{% block head %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/pacientes.css') }}">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pacientes.css') }}?v=1">
 {% endblock %}
 
 {% block content %}
@@ -21,10 +20,12 @@
         <label for="nombre">Nombre</label>
         <input type="text" id="nombre" class="form-control" placeholder="Nombre" required>
       </div>
+
       <div class="col-12 col-md-4">
         <label for="dui">DUI</label>
         <input type="text" id="dui" class="form-control" placeholder="00000000-0" required pattern="^[0-9]{8}-[0-9]{1}$">
       </div>
+
       <div class="col-12 col-md-4">
         <label for="fechaNacimiento">Fecha Nac.</label>
         <input type="date" id="fechaNacimiento" class="form-control" required>
@@ -34,10 +35,12 @@
         <label for="telefono">Teléfono</label>
         <input type="tel" id="telefono" class="form-control" placeholder="0000-0000" required pattern="^[0-9]{4}-[0-9]{4}$">
       </div>
+
       <div class="col-12 col-md-4">
         <label for="correo">Correo</label>
         <input type="email" id="correo" class="form-control" placeholder="ejemplo@correo.com" required>
       </div>
+
       <div class="col-12 col-md-4">
         <label for="genero">Género</label>
         <select id="genero" class="form-select" required>
@@ -54,10 +57,12 @@
           <option>Inactivo</option>
         </select>
       </div>
+
       <div class="col-12 col-md-4">
         <label for="direccion">Dirección</label>
         <input type="text" id="direccion" class="form-control" placeholder="Dirección">
       </div>
+
       <div class="col-12 col-md-4">
         <label for="observaciones">Observaciones</label>
         <input type="text" id="observaciones" class="form-control" placeholder="Observaciones">
@@ -76,9 +81,10 @@
   </form>
 </div>
 
-<!-- TABLA DE PACIENTES RESPONSIVE -->
+<!-- TABLA DE PACIENTES -->
 <div class="table-container mt-4">
   <h5 class="text-center mb-2">Pacientes Registrados</h5>
+
   <div class="table-responsive">
     <table class="table table-striped table-hover align-middle">
       <thead class="table-header">
@@ -93,13 +99,10 @@
           <th>Acciones</th>
         </tr>
       </thead>
-      <tbody id="tablaPacientesBody">
-        <!-- Las filas de pacientes se renderizarán aquí dinámicamente -->
-      </tbody>
+      <tbody id="tablaPacientesBody"></tbody>
     </table>
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="{{ url_for('static', filename='js/pacientes.js') }}"></script>
 {% endblock %}

@@ -1,114 +1,158 @@
-body {
-  font-family: 'Cormorant Garamond', serif;
-  background-color: #f5f5f5;
-  padding: 20px;
-}
 
+
+/* Contenedor principal del formulario */
 .form-container {
   background-color: #ffffff;
-  padding: 30px;
+  padding: 24px 28px;
   border-radius: 12px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-  max-width: 900px;
-  margin: auto;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  border: 1px solid rgba(170,170,170,0.25);
 }
 
-h3, h4 {
-  color: #343a40;
+/* Título */
+.form-container h3 {
+  color: var(--dark-900, #333333);
+  font-weight: 600;
 }
 
+/* Etiquetas y campos */
+.form-container label {
+  font-weight: 500;
+  color: var(--dark-900, #333333);
+}
+
+.form-container .form-control,
+.form-container .form-select {
+  border-radius: 0.55rem;
+  border-color: #dfe3e6;
+}
+
+.form-container .form-control:focus,
+.form-container .form-select:focus {
+  border-color: var(--teal-500, #0cb3b7);
+  box-shadow: 0 0 0 0.2rem rgba(12,179,183,0.25);
+}
+
+/* Botones del formulario */
 .form-buttons {
-  margin-top: 20px;
+  margin-top: 16px;
   display: flex;
+  justify-content: flex-end;
   gap: 10px;
   flex-wrap: wrap;
 }
 
-.table-container {
-  max-width: 1000px;
-  margin: 40px auto;
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-}
-
-.table-header {
-  background-color: #007bff;
-  color: #fff;
-}
-
-.table-striped > tbody > tr:nth-of-type(odd) {
-  background-color: rgba(0, 123, 255, 0.05);
-}
-
-.btn-editar, .btn-eliminar {
-  font-size: 0.85rem;
-}
-
+/* Botón principal (Guardar) en teal */
 .btn-primary {
-  background-color: #007bff;
-  border: none;
+  background-color: var(--teal-700, #0a9a9e);
+  border-color: var(--teal-700, #0a9a9e);
 }
 
 .btn-primary:hover {
-  background-color: #0056b3;
+  background-color: var(--teal-500, #0cb3b7);
+  border-color: var(--teal-500, #0cb3b7);
 }
 
-.btn-warning {
-  background-color: #ffc107;
-  border: none;
-}
-
-.btn-warning:hover {
-  background-color: #e0a800;
-}
-
-.btn-danger {
-  background-color: #dc3545;
-  border: none;
-}
-
-.btn-danger:hover {
-  background-color: #b02a37;
-}
-
+/* Botón secundario (Limpiar) */
 .btn-secondary {
   background-color: #6c757d;
-  border: none;
+  border-color: #6c757d;
 }
 
 .btn-secondary:hover {
   background-color: #5a6268;
+  border-color: #5a6268;
 }
 
-.alert {
-  border-radius: 8px;
-  font-weight: 500;
+/* =========================================================
+   TABLA DE PACIENTES
+   ========================================================= */
+
+.table-container {
+  margin-top: 32px;
+  background-color: #ffffff;
+  padding: 20px 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  border: 1px solid rgba(170,170,170,0.25);
 }
 
-/* Resaltar fila al pasar el mouse */
+.table-container h5 {
+  color: var(--dark-900, #333333);
+  font-weight: 600;
+}
+
+/* Encabezado de tabla */
+.table-header {
+  background-color: var(--teal-700, #0a9a9e);
+  color: #ffffff;
+}
+
+.table-header th {
+  border-color: var(--teal-700, #0a9a9e);
+}
+
+/* Filas alternas suaves usando teal claro */
+.table-striped > tbody > tr:nth-of-type(odd) {
+  background-color: rgba(12,179,183,0.03);
+}
+
+/* Hover en filas */
 .table-hover tbody tr:hover {
-  background-color: rgba(0, 123, 255, 0.15);
+  background-color: rgba(10,154,158,0.08);
   cursor: pointer;
 }
 
 /* Fila seleccionada */
 .table-hover tbody tr.selected {
-  background-color: rgba(0, 123, 255, 0.3);
-  font-weight: bold;
+  background-color: rgba(10,154,158,0.18);
+  font-weight: 600;
 }
 
-/* Botones de acciones en la tabla */
-.btn-editar, .btn-eliminar {
+/* Botones de acciones dentro de la tabla */
+.btn-editar,
+.btn-eliminar {
+  font-size: 0.85rem;
   margin-right: 5px;
 }
+
+
+.btn-editar.btn-warning {
+  background-color: #ffc107;
+  border-color: #ffc107;
+}
+
+.btn-editar.btn-warning:hover {
+  background-color: #e0a800;
+  border-color: #e0a800;
+}
+
+.btn-eliminar.btn-danger {
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+.btn-eliminar.btn-danger:hover {
+  background-color: #b02a37;
+  border-color: #b02a37;
+}
+
+/* =========================================================
+   BUSCADOR / INPUTS AUXILIARES
+   ========================================================= */
+
 #buscarPaciente {
-  border-color: #0a9a9e;
+  border-color: var(--teal-700, #0a9a9e);
 }
 
 #buscarPaciente:focus {
-  box-shadow: 0 0 0 0.2rem rgba(10, 154, 158, 0.25);
+  box-shadow: 0 0 0 0.2rem rgba(10,154,158,0.25);
 }
 
-
+/* =========================================================
+   ALERTAS
+   ========================================================= */
+.alert {
+  border-radius: 8px;
+  font-weight: 500;
+}

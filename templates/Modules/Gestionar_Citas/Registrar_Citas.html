@@ -1,6 +1,11 @@
-{% extends "Layout/base.html" %}
+{% extends "layout/base.html" %}
 
 {% block title %}Registrar_Citas{% endblock %}
+
+{% block css %}
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/Registrar_Citas.css') }}?v=1">
+{% endblock %}
 
 {% block content %}
 <div class="container-fluid py-4">
@@ -10,8 +15,6 @@
     <h2 class="fw-semibold text-primary">
       <i class="bi bi-clipboard-plus"></i> Registrar / Editar Cita Médica
     </h2>
-
-
   </div>  
 
   <!-- Alerta informativa -->

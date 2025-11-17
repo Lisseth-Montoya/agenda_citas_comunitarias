@@ -1,453 +1,206 @@
-/* Sistema de Agenda Médica - Estilos para Perfiles de Médicos */
-
+/* =========================
+   Paleta base
+   ========================= */
 :root {
-    --primary-color: #0a9a9e;
-    --secondary-color: #aaaaaa;
-    --accent-color: #ffffff;
-    --text-color: #333333;
-    --hover-color: #0cb3b7;
-    --success-color: #388E3C;
-    --error-color: #D32F2F;
-    --warning-color: #FBC02D;
+  --color-dark: #333333;
+  --color-primary: #0a9a9e;
+  --color-primary-light: #0cb3b7;
+  --color-white: #ffffff;
+  --color-muted: #aaaaaa;
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* =========================
+   Layout general
+   ========================= */
+body { 
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #fdfdfd;
+  color: var(--color-dark);
 }
 
-body {
-    font-family: 'Times New Roman', Times, serif;
-    font-size: 12px;
-    background-color: var(--primary-color);
-    color: var(--text-color);
-    min-height: 100vh;
+/* Títulos con acento teal */
+.text-teal {
+  color: var(--color-primary);
 }
 
-.main-container {
-    width: 100%;
-    min-height: 100vh;
-    padding: 20px;
+/* Sidebar (si aplica en esta vista) */
+.sidebar {
+  min-height: 100vh;
+  background-color: var(--color-dark);
+  border-right: 1px solid var(--color-muted);
 }
 
-.header-section {
-    background-color: var(--accent-color);
-    padding: 15px 20px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+.sidebar .list-group-item {
+  background-color: transparent;
+  color: var(--color-white);
+  border: none;
 }
 
-.logo-container {
-    display: flex;
-    align-items: center;
-    gap: 15px;
+.list-group-item.active {
+  background-color: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
+  color: var(--color-white);
 }
 
-.logo-img {
-    width: 80px;
-    height: 80px;
-    object-fit: contain;
+.list-group-item .small {
+  font-size: 0.8rem;
+  color: var(--color-white);
 }
 
-.logo-text h1 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 24px;
-    font-weight: bold;
-    color: var(--primary-color);
-    margin: 0;
+.nav-link {
+  font-size: 0.95rem;
+  color: var(--color-white);
 }
 
-.tagline {
-    font-size: 12px;
-    color: var(--secondary-color);
-    margin: 0;
-    font-style: italic;
+.nav-link:hover {
+  background-color: rgba(170, 170, 170, 0.25);
+  color: var(--color-white);
 }
 
-.content-wrapper {
-    display: flex;
-    gap: 20px;
-    align-items: flex-start;
+/* =========================
+   Tarjetas / formularios
+   ========================= */
+
+.card {
+  border: 1px solid rgba(170, 170, 170, 0.5);
+  border-radius: 0.75rem;
 }
 
-.sidebar-left {
-    min-width: 250px;
-    width: 250px;
-    background-color: var(--secondary-color);
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    height: fit-content;
+.card-title {
+  color: var(--color-primary);
+  font-weight: 600;
 }
 
-.photo-section {
-    margin-bottom: 15px;
+form label {
+  font-weight: 500;
+  color: var(--color-dark);
 }
 
-.photo-container {
-    position: relative;
-    width: 180px;
-    height: 180px;
-    margin: 0 auto;
-    border-radius: 8px;
-    overflow: hidden;
-    background-color: var(--accent-color);
-    border: 2px solid var(--primary-color);
-}
-
-.doctor-photo {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.photo-upload-btn {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    background-color: var(--primary-color);
-    color: white;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.photo-upload-btn:hover {
-    background-color: var(--hover-color);
-    transform: scale(1.05);
-}
-
-.photo-upload-btn i {
-    font-size: 20px;
-}
-
-.info-section {
-    margin-top: 15px;
-}
-
-.text-area-custom {
-    background-color: var(--accent-color);
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 12px;
-    resize: none;
-    padding: 10px;
-}
-
-.main-content {
-    flex: 1;
-    background-color: var(--accent-color);
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.section-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 20px;
-    font-weight: bold;
-    color: var(--primary-color);
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-.medical-form {
-    margin-bottom: 30px;
-}
-
-.form-label-custom {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 12px;
-    font-weight: bold;
-    color: var(--text-color);
-    margin-bottom: 5px;
-}
-
-.input-custom,
+.form-control,
 .form-select {
-    background-color: var(--accent-color);
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 12px;
-    padding: 8px 12px;
-    transition: all 0.2s ease;
+  border-color: var(--color-muted);
+  border-radius: 0.5rem;
 }
 
-.input-custom:focus,
+.form-control:focus,
 .form-select:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 0.2rem rgba(10, 154, 158, 0.25);
-    outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 0.15rem rgba(12, 179, 183, 0.25);
 }
 
-.button-group {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 20px;
-    flex-wrap: wrap;
+/* =========================
+   Botones
+   ========================= */
+
+/* Guardar (btn-success) como teal principal */
+.btn-success {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
 }
 
-.btn-action {
-    width: 45px;
-    height: 45px;
-    border-radius: 8px;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.btn-success:hover {
+  background-color: var(--color-primary-light);
+  border-color: var(--color-primary-light);
 }
 
-.btn-action i {
-    font-size: 20px;
+/* Botones de acciones de la tabla */
+#btnGuardar {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-white);
 }
 
-.btn-action:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+#btnGuardar:hover {
+  background-color: var(--color-primary-light);
+  border-color: var(--color-primary-light);
 }
 
-.btn-action:active {
-    transform: translateY(1px);
+#btnEditar {
+  background-color: var(--color-primary-light);
+  border-color: var(--color-primary-light);
+  color: var(--color-dark);
 }
 
-.btn-save {
-    background-color: var(--success-color);
-    color: white;
+#btnEditar:hover {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-white);
 }
 
-.btn-save:hover {
-    background-color: #2e7d32;
+#btnEliminar {
+  background-color: #333333;
+  border-color: #333333;
 }
 
-.btn-edit {
-    background-color: #FFA726;
-    color: white;
+#btnEliminar:hover {
+  background-color: #000000;
+  border-color: #000000;
 }
 
-.btn-edit:hover {
-    background-color: #FB8C00;
+#btnBuscar {
+  background-color: var(--color-white);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
 }
 
-.btn-delete {
-    background-color: var(--error-color);
-    color: white;
+#btnBuscar:hover {
+  background-color: var(--color-primary);
+  color: var(--color-white);
 }
 
-.btn-delete:hover {
-    background-color: #c62828;
+#btnBorrar {
+  background-color: var(--color-muted);
+  border-color: var(--color-muted);
+  color: var(--color-dark);
 }
 
-.btn-search {
-    background-color: #42A5F5;
-    color: white;
+#btnBorrar:hover {
+  background-color: var(--color-dark);
+  border-color: var(--color-dark);
+  color: var(--color-white);
 }
 
-.btn-search:hover {
-    background-color: #1E88E5;
+.btn i {
+  font-size: 1.2rem;
 }
 
-.btn-clean {
-    background-color: #78909C;
-    color: white;
+/* =========================
+   Tabla de médicos
+   ========================= */
+.table {
+  margin-bottom: 0;
 }
 
-.btn-clean:hover {
-    background-color: #546E7A;
+.table th {
+  vertical-align: middle;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border-color: var(--color-primary);
 }
 
-.btn-back {
-    background-color: var(--primary-color);
-    color: white;
+.table td {
+  vertical-align: middle;
 }
 
-.btn-back:hover {
-    background-color: var(--hover-color);
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(12, 179, 183, 0.03);
 }
 
-.table-section {
-    margin-top: 30px;
+.table-hover tbody tr:hover {
+  background-color: rgba(10, 154, 158, 0.08);
 }
 
-.search-box {
-    width: 250px;
+/* Mensaje "Sin registros" */
+#tablaDoctores tbody tr td.text-muted {
+  color: var(--color-muted) !important;
 }
 
-.table-custom {
-    background-color: var(--accent-color);
-    border-collapse: separate;
-    border-spacing: 0;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.table-custom thead {
-    background-color: var(--primary-color);
-    color: white;
-}
-
-.table-custom thead th {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 12px;
-    font-weight: bold;
-    padding: 12px;
-    text-align: left;
-    border: none;
-}
-
-.table-custom tbody td {
-    padding: 10px 12px;
-    border-bottom: 1px solid #e0e0e0;
-    font-size: 12px;
-}
-
-.table-custom tbody tr:last-child td {
-    border-bottom: none;
-}
-
-.table-custom tbody tr:hover {
-    background-color: #f5f5f5;
-    transition: background-color 0.2s ease;
-}
-
-.btn-table-action {
-    background-color: transparent;
-    border: none;
-    color: var(--primary-color);
-    cursor: pointer;
-    padding: 5px;
-    transition: all 0.2s ease;
-}
-
-.btn-table-action:hover {
-    color: var(--hover-color);
-    transform: scale(1.1);
-}
-
-@media (max-width: 1024px) {
-    .content-wrapper {
-        flex-direction: column;
-    }
-    
-    .sidebar-left {
-        width: 100%;
-        margin-bottom: 20px;
-    }
-    
-    .photo-container {
-        width: 150px;
-        height: 150px;
-    }
-}
-
-@media (max-width: 768px) {
-    .main-container {
-        padding: 10px;
-    }
-    
-    .logo-text h1 {
-        font-size: 18px;
-    }
-    
-    .logo-img {
-        width: 60px;
-        height: 60px;
-    }
-    
-    .button-group {
-        gap: 10px;
-    }
-    
-    .btn-action {
-        width: 40px;
-        height: 40px;
-    }
-    
-    .btn-action i {
-        font-size: 16px;
-    }
-    
-    .search-box {
-        width: 100%;
-        margin-top: 10px;
-    }
-    
-    .table-responsive {
-        overflow-x: auto;
-    }
-    
-    .table-custom {
-        font-size: 11px;
-    }
-    
-    .table-custom thead th,
-    .table-custom tbody td {
-        padding: 8px;
-    }
-}
-
-.mb-3 {
-    margin-bottom: 15px;
-}
-
-.mt-4 {
-    margin-top: 20px;
-}
-
-.text-center {
-    text-align: center;
-}
-
-.input-error {
-    border-color: var(--error-color) !important;
-}
-
-.input-success {
-    border-color: var(--success-color) !important;
-}
-
-.input-warning {
-    border-color: var(--warning-color) !important;
-}
-
-.btn-action:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-}
-
-.btn-action:disabled:hover {
-    transform: none;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.badge-active {
-    background-color: var(--success-color);
-    color: white;
-    padding: 4px 12px;
-    border-radius: 12px;
-    font-size: 11px;
-    font-weight: bold;
-    display: inline-block;
-}
-
-.badge-inactive {
-    background-color: var(--secondary-color);
-    color: white;
-    padding: 4px 12px;
-    border-radius: 12px;
-    font-size: 11px;
-    font-weight: bold;
-    display: inline-block;
+/* =========================
+   Alertas
+   ========================= */
+#alerta {
+  border-radius: 0.5rem;
+  border: 1px solid rgba(12, 179, 183, 0.4);
+  background-color: rgba(12, 179, 183, 0.08);
+  color: var(--color-dark);
 }

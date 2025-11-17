@@ -1,31 +1,67 @@
+/* ==============================
+   Paleta en variables
+   ============================== */
+:root {
+  --color-dark: #333333;
+  --color-primary: #0a9a9e;
+  --color-primary-light: #0cb3b7;
+  --color-white: #ffffff;
+  --color-gray: #aaaaaa;
+}
+
+/* ==============================
+   Global
+   ============================== */
 body {
-  background-color: #ffffff;
-  color: #333333;
+  background-color: var(--color-white);
+  color: var(--color-dark);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 header {
-  background-color: #0a9a9e !important;
+  background-color: var(--color-primary) !important;
 }
 
+/* ==============================
+   Cards
+   ============================== */
 .card-header {
-  background-color: #0a9a9e;
-  color: #ffffff;
+  background-color: var(--color-primary);
+  color: var(--color-white);
   text-align: center;
+  font-weight: 600;
+  letter-spacing: 0.5px;
 }
 
+/* ==============================
+   Tablas
+   ============================== */
 .table th {
-  background-color: #0cb3b7;
-  color: #ffffff;
+  background-color: var(--color-primary-light);
+  color: var(--color-white);
+  border-color: #d0f3f3;
 }
 
 .table-hover tbody tr:hover {
-  background-color: #f2fefe;
+  background-color: rgba(10, 154, 158, 0.07);
+}
+
+/* ==============================
+   Botones outline
+   ============================== */
+.btn-outline-primary {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
 }
 
 .btn-outline-primary:hover {
-  background-color: #0a9a9e;
-  color: #fff;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+.btn-outline-warning {
+  border-color: #ffc107;
+  color: #b78904;
 }
 
 .btn-outline-warning:hover {
@@ -33,12 +69,21 @@ header {
   color: #000;
 }
 
-.btn-outline-danger:hover {
-  background-color: #dc3545;
-  color: #fff;
+.btn-outline-danger {
+  border-color: #dc3545;
+  color: #dc3545;
 }
 
+.btn-outline-danger:hover {
+  background-color: #dc3545;
+  color: var(--color-white);
+}
+
+/* ==============================
+   Footer
+   ============================== */
 footer {
-  color: #aaaaaa;
+  color: var(--color-gray);
   font-size: 0.9rem;
+  text-align: center;
 }
