@@ -1,8 +1,10 @@
 from flask import Blueprint, render_template, redirect, url_for, request, jsonify
 from .models import Cita, Paciente, Medico, Especialidad
 from . import db
+from datetime import datetime, timedelta
 
 bp = Blueprint("main", __name__)
+
 
 # =====================================================
 # RUTA PRINCIPAL
@@ -43,7 +45,7 @@ def citas_registrar():
 
     if request.method == "POST":
 
-        id_editar = request.form.get("id_editar")  # para edición
+        id_editar = request.form.get("id_editar")
         nombre_paciente = request.form.get("paciente")
         dui = request.form.get("dui")
         especialidad_id = request.form.get("especialidad")
@@ -54,26 +56,20 @@ def citas_registrar():
         estado = request.form.get("estado")
         notas = request.form.get("notas")
 
-        # -------------------------------------------------------
-        # BUSCAR PACIENTE POR DUI
-        # -------------------------------------------------------
+        # BUSCAR O CREAR PACIENTE
         pac = Paciente.query.filter_by(dui=dui).first()
 
         if pac is None:
-            # Crear paciente nuevo
             pac = Paciente(nombre=nombre_paciente, dui=dui)
             db.session.add(pac)
             db.session.commit()
         else:
-            # 🔥 Si el nombre cambió, actualizarlo
             if pac.nombre != nombre_paciente:
                 pac.nombre = nombre_paciente
                 db.session.commit()
 
-        # -------------------------------------------------------
-        # EDITAR UNA CITA YA EXISTENTE
-        # -------------------------------------------------------
-        if id_editar and id_editar.strip() != "":
+        # EDITAR
+        if id_editar:
             cita = Cita.query.get(id_editar)
 
             cita.paciente_id = pac.id
@@ -88,9 +84,7 @@ def citas_registrar():
             db.session.commit()
             return redirect(url_for("main.agenda"))
 
-        # -------------------------------------------------------
         # NUEVA CITA
-        # -------------------------------------------------------
         nueva = Cita(
             paciente_id=pac.id,
             medico_id=profesional_id,
@@ -106,9 +100,7 @@ def citas_registrar():
         db.session.commit()
         return redirect(url_for("main.agenda"))
 
-    # =====================================================
-    # GET – MOSTRAR FORMULARIO
-    # =====================================================
+    # GET → formulario
     editar_id = request.args.get("editar")
     cita = Cita.query.get(editar_id) if editar_id else None
 
@@ -130,7 +122,6 @@ def citas_registrar():
 @bp.route("/citas/eliminar/<int:id>", methods=["DELETE"])
 def citas_eliminar(id):
     cita = Cita.query.get(id)
-
     if not cita:
         return jsonify({"error": "No existe"}), 404
 
@@ -140,30 +131,53 @@ def citas_eliminar(id):
 
 
 # =====================================================
-# AGENDA SEMANAL
+# AGENDA SEMANAL (Página principal)
 # =====================================================
 @bp.route("/agenda/semanal")
 def agenda_semanal():
+    medicos = Medico.query.all()
     return render_template(
         "Modules/Gestionar_Citas/Agenda_semanal.html",
-        title="Agenda Semanal"
+        title="Agenda Semanal",
+        medicos=medicos
     )
 
 
 # =====================================================
-# RUTAS LEGACY
+# API – CITAS POR SEMANA
 # =====================================================
-@bp.route("/Agenda")
-def agenda_legacy():
-    return redirect(url_for("main.agenda"), code=301)
+@bp.route("/api/citas/semana")
+def api_citas_semana():
 
-@bp.route("/Registrar_Citas")
-def citas_registrar_legacy():
-    return redirect(url_for("main.citas_registrar"), code=301)
+    medico_id = request.args.get("medico_id")
+    fecha_base = request.args.get("fecha")
 
-@bp.route("/Agenda_semanal")
-def agenda_semanal_legacy():
-    return redirect(url_for("main.agenda_semanal"), code=301)
+    if not medico_id or not fecha_base:
+        return jsonify({"error": "Faltan parámetros"}), 400
+
+    fecha_inicio = datetime.fromisoformat(fecha_base)
+    fecha_inicio = fecha_inicio - timedelta(days=fecha_inicio.weekday())
+    fecha_fin = fecha_inicio + timedelta(days=6)
+
+    citas = Cita.query.filter(
+        Cita.medico_id == medico_id,
+        Cita.fecha >= fecha_inicio.date(),
+        Cita.fecha <= fecha_fin.date()
+    ).all()
+
+    data = []
+    for c in citas:
+        data.append({
+            "id": c.id,
+            "paciente": c.paciente.nombre if c.paciente else "",
+            "especialidad": c.especialidad.nombre if c.especialidad else "",
+            "fecha": str(c.fecha),
+            "hora": str(c.hora),
+            "duracion": c.duracion_min,
+            "estado": c.estado
+        })
+
+    return jsonify(data)
 
 
 # =====================================================
@@ -171,18 +185,15 @@ def agenda_semanal_legacy():
 # =====================================================
 @bp.route("/perfiles-medicos")
 def perfiles_medicos():
-    return render_template("modulos/PerfilesMedicos/P-medicos.html",
-                           title="Perfiles Médicos")
+    return render_template("modulos/PerfilesMedicos/P-medicos.html", title="Perfiles Médicos")
 
 @bp.route("/pacientes")
 def pacientes():
-    return render_template("modulos/Pacientes/Pacientes.html",
-                           title="Pacientes")
+    return render_template("modulos/Pacientes/Pacientes.html", title="Pacientes")
 
 @bp.route("/especialidades")
 def especialidades():
-    return render_template("modulos/especialidades/especialidades.html",
-                           title="Especialidades")
+    return render_template("modulos/especialidades/especialidades.html", title="Especialidades")
 
 @bp.route("/reportes")
 def reportes():

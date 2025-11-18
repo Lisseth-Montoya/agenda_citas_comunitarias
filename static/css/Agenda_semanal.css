@@ -72,7 +72,7 @@ header { background: transparent; }
 
 /* --- Estilo de la "carta" (cita) dentro de una celda --- */
 .cita-card {
-  background-color: #007bff; /* Azul Bootstrap */
+  background-color: #838588; /* Azul Bootstrap */
   color: white;
   border-radius: 8px;
   padding: 6px 8px;
@@ -89,6 +89,6 @@ header { background: transparent; }
 }
 
 .cita-card:hover {
-  background-color: #0056b3;
+  background-color: #1c6c71;
   transform: translate(-50%, -50%) scale(1.05);
 }
