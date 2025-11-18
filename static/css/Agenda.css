@@ -1,5 +1,5 @@
 /* ==============================
-   Paleta en variables
+   PALETA DE COLORES
    ============================== */
 :root {
   --color-dark: #333333;
@@ -7,10 +7,14 @@
   --color-primary-light: #0cb3b7;
   --color-white: #ffffff;
   --color-gray: #aaaaaa;
+
+  /* Agregados para modal */
+  --modal-bg: #ffffff;
+  --modal-header-bg: #0a9a9e;
 }
 
 /* ==============================
-   Global
+   GLOBAL
    ============================== */
 body {
   background-color: var(--color-white);
@@ -18,12 +22,8 @@ body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-header {
-  background-color: var(--color-primary) !important;
-}
-
 /* ==============================
-   Cards
+   CARDS
    ============================== */
 .card-header {
   background-color: var(--color-primary);
@@ -34,7 +34,7 @@ header {
 }
 
 /* ==============================
-   Tablas
+   TABLAS
    ============================== */
 .table th {
   background-color: var(--color-primary-light);
@@ -47,7 +47,7 @@ header {
 }
 
 /* ==============================
-   Botones outline
+   BOTONES OUTLINE
    ============================== */
 .btn-outline-primary {
   border-color: var(--color-primary);
@@ -79,8 +79,46 @@ header {
   color: var(--color-white);
 }
 
+/* Íconos más centrados */
+.btn i {
+  font-size: 1rem;
+  pointer-events: none;
+}
+
 /* ==============================
-   Footer
+   MODAL (FIX PARA QUE NO SE VEA "LA PANTALLA GRIS")
+   ============================== */
+
+/* Fondo detrás del modal */
+.modal-backdrop.show {
+  opacity: 0.35 !important; /* menos oscuro */
+  background-color: #000 !important;
+  z-index: 1040 !important;
+}
+
+/* Panel del modal */
+.modal-content {
+  background-color: var(--modal-bg);
+  border-radius: 10px;
+  padding-bottom: 5px;
+  z-index: 1055 !important;
+}
+
+/* Header del modal */
+.modal-header {
+  background-color: var(--modal-header-bg) !important;
+  color: white !important;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+/* Modal centrado correcto */
+.modal-dialog {
+  z-index: 1055 !important;
+}
+
+/* ==============================
+   FOOTER
    ============================== */
 footer {
   color: var(--color-gray);

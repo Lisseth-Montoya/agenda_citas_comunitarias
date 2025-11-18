@@ -1,127 +1,178 @@
 {% extends "layout/base.html" %}
 
-{% block title %}Registrar_Citas{% endblock %}
+{% block title %}Registrar Citas{% endblock %}
 
 {% block css %}
-<link rel="stylesheet"
-      href="{{ url_for('static', filename='css/Registrar_Citas.css') }}?v=1">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/Registrar_Citas.css') }}?v=1">
 {% endblock %}
 
 {% block content %}
 <div class="container-fluid py-4">
 
-  <!-- Encabezado -->
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h2 class="fw-semibold text-primary">
       <i class="bi bi-clipboard-plus"></i> Registrar / Editar Cita Médica
     </h2>
-  </div>  
+  </div>
 
-  <!-- Alerta informativa -->
-  <div class="alert alert-info mb-4" role="alert">
+  <div class="alert alert-info mb-4">
     Complete todos los campos obligatorios antes de guardar la cita.
   </div>
 
-  <!-- Formulario principal -->
   <div class="card shadow-sm">
     <div class="card-body">
-      <form id="formCita" class="needs-validation" novalidate>
+
+      <form id="formCita"
+            method="POST"
+            action="{{ url_for('main.citas_registrar') }}"
+            class="needs-validation"
+            novalidate>
+
+        {% if cita %}
+          <input type="hidden" name="id_editar" value="{{ cita.id }}">
+        {% endif %}
+
         <div class="row g-3">
 
           <!-- Paciente -->
           <div class="col-md-6">
             <label for="paciente" class="form-label">Paciente / Cliente *</label>
-            <input type="text" class="form-control" id="paciente"
-                   placeholder="Ingrese nombre completo" required>
-            <div class="invalid-feedback">El nombre del paciente es obligatorio.</div>
+            <input type="text"
+                   name="paciente"
+                   class="form-control"
+                   id="paciente"
+                   value="{{ cita.paciente.nombre if cita else '' }}"
+                   placeholder="Ingrese nombre completo"
+                   required>
           </div>
 
           <!-- DUI -->
           <div class="col-md-6">
             <label for="dui" class="form-label">DUI *</label>
-            <input type="text" class="form-control" id="dui"
-                   placeholder="00000000-0" required>
-            <div class="invalid-feedback">Debe ingresar un DUI válido.</div>
+
+            <div class="input-group">
+              <input type="text"
+                     name="dui"
+                     class="form-control"
+                     id="dui"
+                     value="{{ cita.paciente.dui if cita else '' }}"
+                     placeholder="00000000-0"
+                     required>
+
+              <a id="btnRegistrarPaciente" class="btn btn-outline-primary" href="#">
+                <i class="bi bi-person-plus"></i>
+              </a>
+            </div>
           </div>
 
           <!-- Especialidad -->
           <div class="col-md-6">
             <label for="especialidad" class="form-label">Servicio o Especialidad *</label>
-            <select class="form-select" id="especialidad" required>
+            <select class="form-select" name="especialidad" id="especialidad" required>
               <option selected disabled value="">Seleccione una opción</option>
-              <option>Medicina General</option>
-              <option>Pediatría</option>
-              <option>Odontología</option>
+
+              {% for esp in especialidades %}
+                <option value="{{ esp.id }}"
+                        {% if cita and cita.especialidad_id == esp.id %}selected{% endif %}>
+                  {{ esp.nombre }}
+                </option>
+              {% endfor %}
             </select>
-            <div class="invalid-feedback">Debe seleccionar una especialidad.</div>
           </div>
 
           <!-- Profesional -->
           <div class="col-md-6">
             <label for="profesional" class="form-label">Profesional *</label>
-            <select class="form-select" id="profesional" required>
+            <select class="form-select" name="profesional" id="profesional" required>
               <option selected disabled value="">Seleccione un profesional</option>
-              <option>Dr. Juan Pérez</option>
-              <option>Dra. María López</option>
-              <option>Dra. Teresa Gómez</option>
+
+              {% for m in medicos %}
+                <option value="{{ m.id }}"
+                        {% if cita and cita.medico_id == m.id %}selected{% endif %}>
+                  {{ m.nombres }} {{ m.apellidos }}
+                </option>
+              {% endfor %}
             </select>
-            <div class="invalid-feedback">Debe indicar el profesional asignado.</div>
           </div>
 
           <!-- Fecha -->
           <div class="col-md-3">
             <label for="fecha" class="form-label">Fecha *</label>
-            <input type="date" class="form-control" id="fecha" required>
-            <div class="invalid-feedback">Seleccione una fecha válida.</div>
+            <input type="date"
+                   name="fecha"
+                   class="form-control"
+                   id="fecha"
+                   value="{{ cita.fecha.strftime('%Y-%m-%d') if cita else '' }}"
+                   required>
           </div>
 
           <!-- Hora -->
           <div class="col-md-3">
             <label for="hora" class="form-label">Hora *</label>
-            <input type="time" class="form-control" id="hora" required>
-            <div class="invalid-feedback">Ingrese una hora válida.</div>
+            <input type="time"
+                   name="hora"
+                   class="form-control"
+                   id="hora"
+                   value="{{ cita.hora.strftime('%H:%M') if cita else '' }}"
+                   required>
           </div>
 
           <!-- Duración -->
           <div class="col-md-3">
             <label for="duracion" class="form-label">Duración (minutos)</label>
-            <input type="number" class="form-control" id="duracion"
-                   placeholder="Ej. 30" min="10" max="180">
+            <input type="number"
+                   name="duracion"
+                   class="form-control"
+                   id="duracion"
+                   value="{{ cita.duracion_min if cita else '' }}"
+                   placeholder="Ej. 30"
+                   min="10"
+                   max="180">
           </div>
 
           <!-- Estado -->
           <div class="col-md-3">
             <label for="estado" class="form-label">Estado</label>
-            <select class="form-select" id="estado">
-              <option>Programada</option>
-              <option>Completada</option>
-              <option>Cancelada</option>
+            <select class="form-select" name="estado" id="estado">
+              <option value="Programada" {% if not cita or cita.estado == "Programada" %}selected{% endif %}>Programada</option>
+              <option value="Completada" {% if cita and cita.estado == "Completada" %}selected{% endif %}>Completada</option>
+              <option value="Cancelada" {% if cita and cita.estado == "Cancelada" %}selected{% endif %}>Cancelada</option>
             </select>
           </div>
 
           <!-- Notas -->
           <div class="col-12">
             <label for="notas" class="form-label">Detalles</label>
-            <textarea class="form-control" id="notas"
-                      rows="3" placeholder="Detalles adicionales..."></textarea>
+            <textarea class="form-control"
+                      name="notas"
+                      id="notas"
+                      rows="3">{{ cita.detalles if cita else '' }}</textarea>
           </div>
+
         </div>
 
         <!-- Botones -->
         <div class="text-end mt-4">
-          <button type="reset" class="btn btn-secondary me-2">
+          <button type="reset" class="btn btn-secondary me-2" id="btnLimpiar">
             <i class="bi bi-arrow-clockwise"></i> Limpiar
           </button>
+
           <button type="submit" class="btn btn-primary">
             <i class="bi bi-save"></i> Guardar
           </button>
         </div>
+
       </form>
+
     </div>
   </div>
 
 </div>
 
-<!-- Script propio -->
-<script src="{{ url_for('static', filename='js/Registrar_Citas.js') }}"></script>
+<script>
+document.getElementById("btnLimpiar").addEventListener("click", function() {
+    document.getElementById("formCita").reset();
+});
+</script>
+
 {% endblock %}

@@ -3,42 +3,56 @@
 {% block title %}Agenda de Citas{% endblock %}
 
 {% block css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/Agenda.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/Agenda.css') }}?v=5">
 {% endblock %}
 
 {% block content %}
+
+<!-- ===================== FILTROS ===================== -->
 <div class="card mb-4 shadow-sm">
-  <div class="card-header fw-semibold">Filtros de búsqueda</div>
+  <div class="card-header fw-semibold">
+    <i class="bi bi-funnel"></i> Filtros de búsqueda
+  </div>
+
   <div class="card-body">
     <form class="row g-3">
+
       <div class="col-md-4">
-        <label for="filtroFecha" class="form-label">Fecha</label>
+        <label class="form-label"><i class="bi bi-calendar-week"></i> Fecha</label>
         <input type="date" id="filtroFecha" class="form-control">
       </div>
+
       <div class="col-md-4">
-        <label for="filtroProfesional" class="form-label">Profesional</label>
+        <label class="form-label"><i class="bi bi-person-badge"></i> Profesional</label>
         <select id="filtroProfesional" class="form-select">
-          <option selected value="">Todos</option>
-          <option>Dr. Juan Pérez</option>
-          <option>Dra. María López</option>
-          <option>Dra. Teresa Gómez</option>
+          <option value="">Todos</option>
+          {% set profesionales = citas | map(attribute='medico') | list | unique %}
+          {% for p in profesionales %}
+            <option value="{{ p }}">{{ p }}</option>
+          {% endfor %}
         </select>
       </div>
+
       <div class="col-md-4">
-        <label for="filtroEstado" class="form-label">Estado</label>
+        <label class="form-label"><i class="bi bi-clipboard-check"></i> Estado</label>
         <select id="filtroEstado" class="form-select">
-          <option selected value="">Todos</option>
+          <option value="">Todos</option>
           <option>Programada</option>
           <option>Completada</option>
           <option>Cancelada</option>
         </select>
       </div>
+
     </form>
   </div>
 </div>
 
+<!-- ===================== TABLA ===================== -->
 <div class="card shadow-sm">
-  <div class="card-header fw-semibold">Listado de citas</div>
+  <div class="card-header fw-semibold">
+    <i class="bi bi-calendar2-check"></i> Listado de citas
+  </div>
+
   <div class="card-body">
     <div class="table-responsive">
       <table class="table table-hover align-middle">
@@ -53,14 +67,100 @@
             <th>Acciones</th>
           </tr>
         </thead>
+
         <tbody id="tablaCitas">
+
+        {% for c in citas %}
+          <tr 
+            data-id="{{ c.id }}"
+            data-paciente="{{ c.paciente }}"
+            data-medico="{{ c.medico }}"
+            data-fecha="{{ c.fecha.strftime('%Y-%m-%d') }}"
+            data-hora="{{ c.hora.strftime('%H:%M') }}"
+            data-estado="{{ c.estado }}"
+            data-detalles="{{ c.detalles if c.detalles else '' }}"
+          >
+            <td>{{ c.id }}</td>
+            <td>{{ c.paciente }}</td>
+            <td>{{ c.medico }}</td>
+            <td>{{ c.fecha.strftime('%d/%m/%Y') }}</td>
+            <td>{{ c.hora.strftime('%H:%M') }}</td>
+            <td>{{ c.estado }}</td>
+
+            <td class="d-flex gap-1">
+
+              <!-- VER -->
+              <button class="btn btn-sm btn-outline-primary btn-ver">
+                <i class="bi bi-eye"></i>
+              </button>
+
+              <!-- EDITAR -->
+              <a href="{{ url_for('main.citas_registrar', editar=c.id) }}"
+                class="btn btn-sm btn-outline-warning btn-editar"
+                title="Editar cita">
+                <i class="bi bi-pencil-square"></i>
+              </a>
+
+
+
+              <!-- ELIMINAR -->
+              <button class="btn btn-sm btn-outline-danger btn-eliminar">
+                <i class="bi bi-trash"></i>
+              </button>
+
+            </td>
+
+          </tr>
+        {% endfor %}
+
+        {% if citas|length == 0 %}
+          <tr>
+            <td colspan="7" class="text-center text-muted py-3">
+              <i class="bi bi-exclamation-circle"></i> No hay citas registradas
+            </td>
+          </tr>
+        {% endif %}
+
         </tbody>
       </table>
     </div>
   </div>
 </div>
+
+<!-- ===================== MODAL VER ===================== -->
+<div class="modal fade" id="modalVer" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">
+          <i class="bi bi-info-circle"></i> Detalles de la Cita
+        </h5>
+        <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        <p><strong>Paciente:</strong> <span id="verPaciente"></span></p>
+        <p><strong>Profesional:</strong> <span id="verMedico"></span></p>
+        <p><strong>Fecha:</strong> <span id="verFecha"></span></p>
+        <p><strong>Hora:</strong> <span id="verHora"></span></p>
+        <p><strong>Estado:</strong> <span id="verEstado"></span></p>
+        <p><strong>Motivo / Detalles:</strong> <span id="verDetalles"></span></p>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">
+          <i class="bi bi-x-circle"></i> Cerrar
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ url_for('static', filename='js/Agenda.js') }}"></script>
+<script src="{{ url_for('static', filename='js/validaciones/filtro_agenda.js') }}"></script>
+<script src="{{ url_for('static', filename='js/validaciones/agenda_acciones.js') }}?v=10"></script>
 {% endblock %}

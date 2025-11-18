@@ -19,41 +19,38 @@
 
   <body class="bg-body">
 
-  
+    <!-- =====================================================
+         ENCABEZADO
+         ===================================================== -->
     <header class="app-header border-bottom">
-  <div class="container-fluid d-flex align-items-center justify-content-between py-2 px-3">
+      <div class="container-fluid d-flex align-items-center justify-content-between py-2 px-3">
 
-    <!-- Logo + Títulos -->
-    <div class="d-flex align-items-center gap-3">
+        <div class="d-flex align-items-center gap-3">
 
-      <img
-        src="{{ url_for('static', filename='images/logo.png') }}"
-        alt="Logo"
-        height="38"
-        class="rounded shadow-sm"
-      >
+          <img
+            src="{{ url_for('static', filename='images/logo.png') }}"
+            alt="Logo"
+            height="38"
+            class="rounded shadow-sm"
+          >
 
-      <div class="d-flex flex-column">
-        <span class="fw-bold text-dark-900 fs-5">
-          Sistema de Citas
-        </span>
-        <small class="text-secondary">
-          Clínica Comunitaria · Gestión de Citas
-        </small>
+          <div class="d-flex flex-column">
+            <span class="fw-bold text-dark-900 fs-5">Sistema de Citas</span>
+            <small class="text-secondary">Clínica Comunitaria · Gestión de Citas</small>
+          </div>
+
+        </div>
+
+        <button
+          class="btn btn-outline-secondary d-lg-none"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#sidebarMenu"
+          aria-label="Abrir menú">
+          <i class="bi bi-list"></i>
+        </button>
+
       </div>
-    </div>
-
-    <!-- Botón móvil -->
-    <button
-      class="btn btn-outline-secondary d-lg-none"
-      data-bs-toggle="offcanvas"
-      data-bs-target="#sidebarMenu"
-      aria-label="Abrir menú">
-      <i class="bi bi-list"></i>
-    </button>
-
-  </div>
-</header>
+    </header>
 
     <!-- =====================================================
          SIDEBAR
@@ -82,76 +79,84 @@
           </div>
         </div>
 
-        <!-- Agenda -->
+        <!-- AGENDA -->
         <div class="px-3 pt-3 text-uppercase small fw-semibold text-muted">Agenda</div>
         <ul class="nav flex-column px-2">
           <li class="nav-item">
-            <!-- Activo en "/" o "/agenda" -->
-            <a
-              class="nav-link d-flex align-items-center gap-2 {% if request.path == '/' or request.path == '/agenda' %}active{% endif %}"
-              href="{{ url_for('main.agenda') }}">
-              <i class="bi bi-speedometer2"></i> Agenda
+            <a class="nav-link d-flex align-items-center gap-2 {% if request.path == '/' or request.path == '/agenda' %}active{% endif %}"
+               href="{{ url_for('main.agenda') }}">
+               <i class="bi bi-speedometer2"></i> Agenda
             </a>
           </li>
 
           <li class="nav-item">
-            <a
-              class="nav-link d-flex align-items-center gap-2 {% if request.path.startswith('/citas/registrar') %}active{% endif %}"
-              href="{{ url_for('main.citas_registrar') }}">
-              <i class="bi bi-clipboard-plus"></i> Registrar Citas
+            <a class="nav-link d-flex align-items-center gap-2 {% if request.path.startswith('/citas/registrar') %}active{% endif %}"
+               href="{{ url_for('main.citas_registrar') }}">
+               <i class="bi bi-clipboard-plus"></i> Registrar Citas
             </a>
           </li>
 
           <li class="nav-item">
-            <a
-              class="nav-link d-flex align-items-center gap-2 {% if request.path.startswith('/agenda/semanal') %}active{% endif %}"
-              href="{{ url_for('main.agenda_semanal') }}">
-              <i class="bi bi-calendar-week"></i> Agenda Semanal
+            <a class="nav-link d-flex align-items-center gap-2 {% if request.path.startswith('/agenda/semanal') %}active{% endif %}"
+               href="{{ url_for('main.agenda_semanal') }}">
+               <i class="bi bi-calendar-week"></i> Agenda Semanal
             </a>
           </li>
         </ul>
 
-        <!-- Gestión -->
+        <!-- GESTIÓN -->
         <div class="px-3 pt-3 text-uppercase small fw-semibold text-muted">Gestión</div>
         <ul class="nav flex-column px-2 mb-4">
           <li class="nav-item">
-            <a
-              class="nav-link d-flex align-items-center gap-2 {% if request.path.startswith('/perfiles-medicos') %}active{% endif %}"
-              href="{{ url_for('main.perfiles_medicos') }}">
-              <i class="bi bi-person-vcard"></i> Perfiles Médicos
+            <a class="nav-link d-flex align-items-center gap-2 {% if request.path.startswith('/perfiles-medicos') %}active{% endif %}"
+               href="{{ url_for('main.perfiles_medicos') }}">
+               <i class="bi bi-person-vcard"></i> Perfiles Médicos
             </a>
           </li>
+
           <li class="nav-item">
-            <a
-              class="nav-link d-flex align-items-center gap-2 {% if request.path.startswith('/pacientes') %}active{% endif %}"
-              href="{{ url_for('main.pacientes') }}">
-              <i class="bi bi-people"></i> Pacientes
+            <a class="nav-link d-flex align-items-center gap-2 {% if request.path.startswith('/pacientes') %}active{% endif %}"
+               href="{{ url_for('main.pacientes') }}">
+               <i class="bi bi-people"></i> Pacientes
             </a>
           </li>
+
           <li class="nav-item">
-            <a
-              class="nav-link d-flex align-items-center gap-2 {% if request.path.startswith('/especialidades') %}active{% endif %}"
-              href="{{ url_for('main.especialidades') }}">
-              <i class="bi bi-collection"></i> Especialidades
+            <a class="nav-link d-flex align-items-center gap-2 {% if request.path.startswith('/especialidades') %}active{% endif %}"
+               href="{{ url_for('main.especialidades') }}">
+               <i class="bi bi-collection"></i> Especialidades
             </a>
           </li>
         </ul>
+
       </nav>
     </div>
 
     <!-- =====================================================
-         CONTENIDO + FOOTER
+         CONTENIDO
          ===================================================== -->
     <main class="content-wrapper">
       <div class="container-fluid">
         {% block content %}{% endblock %}
-
-       
       </div>
     </main>
 
-    <!-- JS Bootstrap + bloques específicos -->
+    <!-- =====================================================
+         SCRIPTS (CORREGIDO)
+         ===================================================== -->
+
+    <!-- Bootstrap Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Fix para que los modals no queden gris y se centren -->
+    <script>
+      document.addEventListener("shown.bs.modal", function (event) {
+          const modal = event.target;
+          modal.classList.add("show");
+      });
+    </script>
+
     {% block scripts %}{% endblock %}
+
   </body>
 </html>
