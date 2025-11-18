@@ -14,10 +14,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const nombre = document.getElementById('nombre').value.trim();
         const descripcion = document.getElementById('descripcion').value.trim();
         const duracion = document.getElementById('duracion').value.trim();
-        const precio = document.getElementById('precio').value.trim();
         const estado = document.getElementById('estado').value;
 
-        if (!nombre || !descripcion || !duracion || !precio) {
+        if (!nombre || !descripcion || !duracion) {
             alert('Por favor complete todos los campos obligatorios.');
             return;
         }
@@ -28,7 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
             nombre,
             descripcion,
             duracion,
-            precio,
             estado,
             fechaRegistro: editIndex === null ? fechaActual : especialidades[editIndex].fechaRegistro
         };
@@ -44,7 +42,8 @@ document.addEventListener('DOMContentLoaded', () => {
         form.reset();
         fechaInput.value = '';
         renderTabla();
-        document.querySelector('button[type="submit"]').innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Guardar';
+        document.querySelector('button[type="submit"]').innerHTML =
+            '<i class="fa-solid fa-floppy-disk"></i> Guardar';
     });
 
     function renderTabla() {
@@ -56,9 +55,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${esp.nombre}</td>
                 <td>${esp.descripcion}</td>
                 <td>${esp.duracion} min</td>
-                <td>$${parseFloat(esp.precio).toFixed(2)}</td>
                 <td>
-                    <span class="badge ${esp.estado === 'Activo' ? 'bg-success' : 'bg-secondary'}">${esp.estado}</span>
+                    <span class="badge ${esp.estado === 'Activo' ? 'bg-success' : 'bg-secondary'}">
+                        ${esp.estado}
+                    </span>
                 </td>
                 <td>${esp.fechaRegistro}</td>
                 <td>
@@ -79,11 +79,13 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('nombre').value = esp.nombre;
         document.getElementById('descripcion').value = esp.descripcion;
         document.getElementById('duracion').value = esp.duracion;
-        document.getElementById('precio').value = esp.precio;
         document.getElementById('estado').value = esp.estado;
         fechaInput.value = esp.fechaRegistro;
+
         editIndex = index;
-        document.querySelector('button[type="submit"]').innerHTML = '<i class="fa-solid fa-rotate"></i> Actualizar';
+
+        document.querySelector('button[type="submit"]').innerHTML =
+            '<i class="fa-solid fa-rotate"></i> Actualizar';
     };
 
     window.eliminar = (index) => {
@@ -97,7 +99,8 @@ document.addEventListener('DOMContentLoaded', () => {
         form.reset();
         fechaInput.value = '';
         editIndex = null;
-        document.querySelector('button[type="submit"]').innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Guardar';
+        document.querySelector('button[type="submit"]').innerHTML =
+            '<i class="fa-solid fa-floppy-disk"></i> Guardar';
     });
 
     function mostrarAlerta() {
