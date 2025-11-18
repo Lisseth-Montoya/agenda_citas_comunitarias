@@ -6,7 +6,9 @@
   <title>Sistema de Citas</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="{{url_for('static, filname=css/P-medicos.css')}}">
   <link rel="stylesheet" href="P-medicos.css">
+  
 </head>
 <body>
 
@@ -73,6 +75,15 @@
             <label class="form-label">Correo Electrónico</label>
             <input type="email" id="email" class="form-control">
           </div>
+         <div class="col-md-6">
+            <label class="form-label">Teléfono de responsable(Emergencia)</label>
+            <input type="text" id="telefonoResponsable" class="form-control">
+          </div>
+          <div class="col-md-6">
+  <label class="form-label">Horario</label>
+  <input type="text" id="horario" class="form-control" placeholder="Ej: 8:00 AM - 4:00 PM">
+</div>
+
           <div class="col-md-6">
             <label class="form-label">Estado</label>
             <select id="estado" class="form-select">
@@ -94,6 +105,9 @@
             <button class="btn btn-danger me-2" id="btnEliminar"><i class="bi bi-trash"></i></button>
             <button class="btn btn-primary me-2" id="btnBuscar"><i class="bi bi-search"></i></button>
             <button class="btn btn-secondary" id="btnBorrar"><i class="bi bi-eraser"></i></button>
+          <button class="btn btn-info me-2" id="btnVolver"><i class="bi bi-arrow-counterclockwise"></i>
+</button>
+
           </div>
 
           <table class="table table-bordered align-middle text-center" id="tablaDoctores">
@@ -106,11 +120,12 @@
                 <th>Especialidad</th>
                 <th>Teléfono</th>
                 <th>Email</th>
+                <th>Horario</th>
                 <th>Estado</th>
               </tr>
             </thead>
             <tbody>
-              <tr><td colspan="8" class="text-muted">Sin registros</td></tr>
+              <tr><td colspan="9" class="text-muted">Sin registros</td></tr>
             </tbody>
           </table>
         </div>
@@ -118,6 +133,8 @@
     </div>
   </div>
 
-  <script src="script.js"></script>
+<script src="../../../static/js/P_medicos.js"></script>
+<script src="../../../static/css/P-medicos.css"></script>
+
 </body>
 </html>

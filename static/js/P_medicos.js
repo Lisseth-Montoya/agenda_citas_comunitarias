@@ -51,19 +51,24 @@ document.getElementById("btnEliminar").addEventListener("click", function () {
   }
 });
 
-// ✅ Buscar (por nombre o apellido)
+// ✅ Buscar
 document.getElementById("btnBuscar").addEventListener("click", function () {
   const termino = prompt("Ingrese nombre o apellido a buscar:");
   if (!termino) return;
 
   for (let fila of tabla.rows) {
-    if (fila.cells[0].colSpan === 8) continue; // saltar fila vacía
+    if (fila.cells[0].colSpan === 9) continue;
 
     const nombre = fila.cells[1].textContent.toLowerCase();
     const apellido = fila.cells[2].textContent.toLowerCase();
     const visible = nombre.includes(termino.toLowerCase()) || apellido.includes(termino.toLowerCase());
     fila.style.display = visible ? "" : "none";
   }
+});
+
+document.getElementById("btnVolver").addEventListener("click", function () {
+  restaurarFilas();
+  alert("Se restauraron todos los registros.");
 });
 
 // ✅ Borrar todos
@@ -85,12 +90,13 @@ function obtenerDatosFormulario() {
     especialidad: document.getElementById("especialidad").value,
     telefono: document.getElementById("telefono").value,
     email: document.getElementById("email").value,
+    horario: document.getElementById("horario").value,
     estado: document.getElementById("estado").value
   };
 }
 
 function agregarFila(datos) {
-  if (tabla.rows.length === 1 && tabla.rows[0].cells[0].colSpan === 8) tabla.innerHTML = "";
+  if (tabla.rows.length === 1 && tabla.rows[0].cells[0].colSpan === 9) tabla.innerHTML = "";
 
   const fila = tabla.insertRow();
   fila.insertCell(0).textContent = contador++;
@@ -100,8 +106,9 @@ function agregarFila(datos) {
   fila.insertCell(4).textContent = datos.especialidad;
   fila.insertCell(5).textContent = datos.telefono;
   fila.insertCell(6).textContent = datos.email;
+  fila.insertCell(7).textContent = datos.horario;
 
-  const estadoCell = fila.insertCell(7);
+  const estadoCell = fila.insertCell(8);
   const select = document.createElement("select");
   select.className = "form-select form-select-sm";
   select.innerHTML = `
@@ -122,6 +129,7 @@ function actualizarFila(fila, datos) {
   fila.cells[4].textContent = datos.especialidad;
   fila.cells[5].textContent = datos.telefono;
   fila.cells[6].textContent = datos.email;
+  fila.cells[7].textContent = datos.horario;
   fila.querySelector("select").value = datos.estado;
   actualizarColorEstado(fila.querySelector("select"));
 }
@@ -133,6 +141,7 @@ function cargarDatosEnFormulario(fila) {
   document.getElementById("especialidad").value = fila.cells[4].textContent;
   document.getElementById("telefono").value = fila.cells[5].textContent;
   document.getElementById("email").value = fila.cells[6].textContent;
+  document.getElementById("horario").value = fila.cells[7].textContent;
   document.getElementById("estado").value = fila.querySelector("select").value;
 }
 
@@ -157,5 +166,11 @@ function actualizarColorEstado(select) {
 }
 
 function agregarFilaVacia() {
-  tabla.innerHTML = '<tr><td colspan="8" class="text-muted">Sin registros</td></tr>';
+  tabla.innerHTML = '<tr><td colspan="9" class="text-muted">Sin registros</td></tr>';
+}
+
+function restaurarFilas() {
+  for (let fila of tabla.rows) {
+    fila.style.display = "";
+  }
 }
