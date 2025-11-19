@@ -5,14 +5,12 @@ from datetime import datetime, timedelta
 
 bp = Blueprint("main", __name__)
 
-
 # =====================================================
 # RUTA PRINCIPAL
 # =====================================================
 @bp.route("/")
 def index():
     return render_template("layout/index.html", title="Inicio")
-
 
 # =====================================================
 # AGENDA – LISTADO DE CITAS
@@ -35,7 +33,6 @@ def agenda():
         title="Agenda",
         citas=citas
     )
-
 
 # =====================================================
 # REGISTRAR / EDITAR CITA
@@ -100,7 +97,6 @@ def citas_registrar():
         db.session.commit()
         return redirect(url_for("main.agenda"))
 
-    # GET — mostrar formulario
     editar_id = request.args.get("editar")
     cita = Cita.query.get(editar_id) if editar_id else None
 
@@ -115,7 +111,6 @@ def citas_registrar():
         cita=cita
     )
 
-
 # =====================================================
 # ELIMINAR CITA
 # =====================================================
@@ -129,7 +124,6 @@ def citas_eliminar(id):
     db.session.commit()
     return jsonify({"mensaje": "Cita eliminada"}), 200
 
-
 # =====================================================
 # AGENDA SEMANAL
 # =====================================================
@@ -141,7 +135,6 @@ def agenda_semanal():
         title="Agenda Semanal",
         medicos=medicos
     )
-
 
 # =====================================================
 # API – CITAS POR SEMANA
@@ -179,7 +172,6 @@ def api_citas_semana():
 
     return jsonify(data)
 
-
 # =====================================================
 # PÁGINAS SECCIONALES
 # =====================================================
@@ -187,16 +179,13 @@ def api_citas_semana():
 def vista_perfiles_medicos():
     return render_template("modulos/PerfilesMedicos/P-medicos.html", title="Perfiles Médicos")
 
-
 @bp.route("/pacientes")
 def vista_pacientes():
     return render_template("modulos/Pacientes/Pacientes.html", title="Pacientes")
 
-
 @bp.route("/especialidades")
 def vista_especialidades():
     return render_template("modulos/especialidades/especialidades.html", title="Especialidades")
-
 
 # =====================================================
 # MÉDICOS – CRUD API
@@ -219,7 +208,6 @@ def api_medicos_listar():
         })
 
     return jsonify(data)
-
 
 @bp.route("/api/medicos/guardar", methods=["POST"])
 def api_medicos_guardar():
@@ -260,7 +248,6 @@ def api_medicos_guardar():
 
     return jsonify({"mensaje": "Guardado correctamente"})
 
-
 @bp.route("/api/medicos/obtener/<int:id>")
 def api_medicos_obtener(id):
     m = Medico.query.get(id)
@@ -278,7 +265,6 @@ def api_medicos_obtener(id):
         "estado": m.estado
     })
 
-
 @bp.route("/api/medicos/eliminar/<int:id>", methods=["DELETE"])
 def api_medicos_eliminar(id):
     m = Medico.query.get(id)
@@ -290,12 +276,10 @@ def api_medicos_eliminar(id):
 
     return jsonify({"mensaje": "Eliminado"})
 
-
 # =======================================================
 #   ESPECIALIDADES – CRUD API
 # =======================================================
 
-# LISTAR
 @bp.route("/api/especialidades/listar")
 def api_especialidades_listar():
     especialidades = Especialidad.query.order_by(Especialidad.id.asc()).all()
@@ -314,8 +298,6 @@ def api_especialidades_listar():
 
     return jsonify(data)
 
-
-# GUARDAR / EDITAR
 @bp.route("/api/especialidades/guardar", methods=["POST"])
 def api_especialidades_guardar():
     data = request.json
@@ -345,8 +327,6 @@ def api_especialidades_guardar():
 
     return jsonify({"mensaje": "Guardado correctamente"})
 
-
-# OBTENER UNO
 @bp.route("/api/especialidades/obtener/<int:id>")
 def api_especialidades_obtener(id):
     esp = Especialidad.query.get(id)
@@ -363,8 +343,6 @@ def api_especialidades_obtener(id):
         "fecha_registro": esp.fecha_registro.strftime("%Y-%m-%d %H:%M") if esp.fecha_registro else "Sin fecha"
     })
 
-
-# ELIMINAR
 @bp.route("/api/especialidades/eliminar/<int:id>", methods=["DELETE"])
 def api_especialidades_eliminar(id):
     esp = Especialidad.query.get(id)
@@ -375,3 +353,94 @@ def api_especialidades_eliminar(id):
     db.session.commit()
 
     return jsonify({"mensaje": "Eliminado"})
+
+# =====================================================
+# CRUD PACIENTES
+# =====================================================
+
+@bp.route("/api/pacientes")
+def api_listar_pacientes():
+    pacientes = Paciente.query.all()
+    return jsonify([
+        {
+            "id": p.id,
+            "nombre": p.nombre,
+            "dui": p.dui,
+            "telefono": p.telefono,
+            "correo": p.correo,
+            "genero": p.genero,
+            "estado": p.estado,
+            "direccion": p.direccion,
+            "observaciones": p.observaciones,
+            "fecha_nac": p.fecha_nac.strftime('%Y-%m-%d') if p.fecha_nac else ""
+        } for p in pacientes
+    ])
+
+@bp.route("/api/pacientes/<int:id>", methods=['GET'])
+def api_detalle_paciente(id):
+    p = Paciente.query.get_or_404(id)
+    return jsonify({
+        "id": p.id,
+        "nombre": p.nombre,
+        "dui": p.dui,
+        "telefono": p.telefono,
+        "correo": p.correo,
+        "genero": p.genero,
+        "estado": p.estado,
+        "direccion": p.direccion,
+        "observaciones": p.observaciones,
+        "fecha_nac": p.fecha_nac.strftime('%Y-%m-%d') if p.fecha_nac else ""
+    })
+
+@bp.route("/api/pacientes", methods=['POST'])
+def api_crear_paciente():
+    data = request.json
+    try:
+        p = Paciente(
+            nombre=data['nombre'],
+            dui=data['dui'],
+            telefono=data['telefono'],
+            correo=data['correo'],
+            genero=data['genero'],
+            direccion=data['direccion'],
+            estado=data['estado'],
+            observaciones=data['observaciones'],
+            fecha_nac=datetime.strptime(data['fecha_nac'], '%Y-%m-%d')
+        )
+        db.session.add(p)
+        db.session.commit()
+        return jsonify({"status": "success", "message": "Paciente registrado correctamente."})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"status": "error", "message": str(e)}), 400
+
+@bp.route("/api/pacientes/<int:id>", methods=['PUT'])
+def api_editar_paciente(id):
+    data = request.json
+    try:
+        p = Paciente.query.get_or_404(id)
+        p.nombre = data['nombre']
+        p.dui = data['dui']
+        p.telefono = data['telefono']
+        p.correo = data['correo']
+        p.genero = data['genero']
+        p.direccion = data['direccion']
+        p.estado = data['estado']
+        p.observaciones = data['observaciones']
+        p.fecha_nac = datetime.strptime(data['fecha_nac'], '%Y-%m-%d')
+        db.session.commit()
+        return jsonify({"status": "success", "message": "Paciente actualizado correctamente."})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"status": "error", "message": str(e)}), 400
+
+@bp.route("/api/pacientes/<int:id>", methods=['DELETE'])
+def api_eliminar_paciente(id):
+    try:
+        p = Paciente.query.get_or_404(id)
+        db.session.delete(p)
+        db.session.commit()
+        return jsonify({"status": "success", "message": "Paciente eliminado correctamente."})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"status": "error", "message": str(e)}), 400

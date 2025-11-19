@@ -1,7 +1,6 @@
 from datetime import datetime
 from . import db
 
-
 # ============================================================
 #  ESPECIALIDADES MÉDICAS
 # ============================================================
@@ -16,10 +15,7 @@ class Especialidad(db.Model):
     estado = db.Column(db.String(20), default="Activo")
     fecha_registro = db.Column(db.DateTime, default=datetime.utcnow)
 
-    # Relación con citas
     citas = db.relationship("Cita", back_populates="especialidad")
-
-    # Relación con médicos
     medicos = db.relationship("Medico", back_populates="especialidad")
 
     def __repr__(self):
@@ -40,13 +36,9 @@ class Medico(db.Model):
     email = db.Column(db.String(120))
     estado = db.Column(db.String(20), default="Activo")
 
-    # FK → Especialidad
     especialidad_id = db.Column(db.Integer, db.ForeignKey('especialidades.id'), nullable=False)
 
-    # Relación correcta (solo una)
     especialidad = db.relationship("Especialidad", back_populates="medicos")
-
-    # Relación con citas
     citas = db.relationship("Cita", back_populates="medico")
 
     def __repr__(self):
@@ -59,10 +51,15 @@ class Medico(db.Model):
 class Paciente(db.Model):
     __tablename__ = 'pacientes'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+
     nombre = db.Column(db.String(120), nullable=False)
+    apellido = db.Column(db.String(120), nullable=False)  # obligatorio
     dui = db.Column(db.String(15), unique=True, nullable=False)
+
     fecha_nac = db.Column(db.Date)
+    fecha_registro = db.Column(db.DateTime, default=datetime.utcnow)
+
     telefono = db.Column(db.String(20))
     correo = db.Column(db.String(120))
     direccion = db.Column(db.String(250))
@@ -70,8 +67,11 @@ class Paciente(db.Model):
     observaciones = db.Column(db.Text)
     estado = db.Column(db.String(20), default="Activo")
 
-    # Relación con citas
     citas = db.relationship("Cita", back_populates="paciente")
+
+    __table_args__ = (
+        db.UniqueConstraint('dui', name='uq_paciente_dui'),
+    )
 
     def __repr__(self):
         return f'<Paciente {self.nombre}>'
@@ -94,7 +94,6 @@ class Cita(db.Model):
     medico_id = db.Column(db.Integer, db.ForeignKey("medicos.id"))
     especialidad_id = db.Column(db.Integer, db.ForeignKey("especialidades.id"))
 
-    # Relaciones
     paciente = db.relationship("Paciente", back_populates="citas")
     medico = db.relationship("Medico", back_populates="citas")
     especialidad = db.relationship("Especialidad", back_populates="citas")
