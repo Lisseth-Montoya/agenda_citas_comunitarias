@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 body {
   font-family: 'Segoe UI', sans-serif;
   background-color: #fff;
@@ -15,15 +16,64 @@ body {
 .list-group-item.active {
   background-color: #009688 !important;
   border-color: #009688 !important;
+=======
+/* =========================
+   Paleta base
+   ========================= */
+:root {
+  --color-dark: #333333;
+  --color-primary: #0a9a9e;
+  --color-primary-light: #0cb3b7;
+  --color-white: #ffffff;
+  --color-muted: #aaaaaa;
+}
+
+/* =========================
+   Layout general
+   ========================= */
+body { 
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #fdfdfd;
+  color: var(--color-dark);
+}
+
+/* Títulos con acento teal */
+.text-teal {
+  color: var(--color-primary);
+}
+
+/* Sidebar (si aplica en esta vista) */
+.sidebar {
+  min-height: 100vh;
+  background-color: var(--color-dark);
+  border-right: 1px solid var(--color-muted);
+}
+
+.sidebar .list-group-item {
+  background-color: transparent;
+  color: var(--color-white);
+  border: none;
+}
+
+.list-group-item.active {
+  background-color: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
+  color: var(--color-white);
+>>>>>>> origin/feature/Fredi
 }
 
 .list-group-item .small {
   font-size: 0.8rem;
+<<<<<<< HEAD
   color: white;
+=======
+  color: var(--color-white);
+>>>>>>> origin/feature/Fredi
 }
 
 .nav-link {
   font-size: 0.95rem;
+<<<<<<< HEAD
 }
 
 .nav-link:hover {
@@ -37,3 +87,160 @@ body {
 .btn i {
   font-size: 1.2rem;
 }
+=======
+  color: var(--color-white);
+}
+
+.nav-link:hover {
+  background-color: rgba(170, 170, 170, 0.25);
+  color: var(--color-white);
+}
+
+/* =========================
+   Tarjetas / formularios
+   ========================= */
+
+.card {
+  border: 1px solid rgba(170, 170, 170, 0.5);
+  border-radius: 0.75rem;
+}
+
+.card-title {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+form label {
+  font-weight: 500;
+  color: var(--color-dark);
+}
+
+.form-control,
+.form-select {
+  border-color: var(--color-muted);
+  border-radius: 0.5rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 0.15rem rgba(12, 179, 183, 0.25);
+}
+
+/* =========================
+   Botones
+   ========================= */
+
+/* Guardar (btn-success) como teal principal */
+.btn-success {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.btn-success:hover {
+  background-color: var(--color-primary-light);
+  border-color: var(--color-primary-light);
+}
+
+/* Botones de acciones de la tabla */
+#btnGuardar {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+#btnGuardar:hover {
+  background-color: var(--color-primary-light);
+  border-color: var(--color-primary-light);
+}
+
+#btnEditar {
+  background-color: var(--color-primary-light);
+  border-color: var(--color-primary-light);
+  color: var(--color-dark);
+}
+
+#btnEditar:hover {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+#btnEliminar {
+  background-color: #333333;
+  border-color: #333333;
+}
+
+#btnEliminar:hover {
+  background-color: #ba5252;
+  border-color: #b44444;
+}
+
+#btnBuscar {
+  background-color: var(--color-white);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+#btnBuscar:hover {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+#btnBorrar {
+  background-color: var(--color-muted);
+  border-color: var(--color-muted);
+  color: var(--color-dark);
+}
+
+#btnBorrar:hover {
+  background-color: var(--color-dark);
+  border-color: var(--color-dark);
+  color: var(--color-white);
+}
+
+.btn i {
+  font-size: 1.2rem;
+}
+
+/* =========================
+   Tabla de médicos
+   ========================= */
+.table {
+  margin-bottom: 0;
+}
+
+.table th {
+  vertical-align: middle;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border-color: var(--color-primary);
+}
+
+.table td {
+  vertical-align: middle;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(12, 179, 183, 0.03);
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(10, 154, 158, 0.08);
+}
+
+/* Mensaje "Sin registros" */
+#tablaDoctores tbody tr td.text-muted {
+  color: var(--color-muted) !important;
+}
+
+/* =========================
+   Alertas
+   ========================= */
+#alerta {
+  border-radius: 0.5rem;
+  border: 1px solid rgba(12, 179, 183, 0.4);
+  background-color: rgba(12, 179, 183, 0.08);
+  color: var(--color-dark);
+}
+>>>>>>> origin/feature/Fredi

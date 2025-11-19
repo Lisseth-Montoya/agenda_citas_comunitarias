@@ -2,7 +2,7 @@ from pathlib import Path
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from jinja2 import FileSystemLoader, ChoiceLoader
-from config import DevelopmentConfig   # ← usaremos esta para modo desarrollo
+from config import DevelopmentConfig   # para modo dev
 
 # Rutas base
 ROOT = Path(__file__).resolve().parent.parent
@@ -22,7 +22,7 @@ def create_app(config_class=DevelopmentConfig):
     # Cargar configuración
     app.config.from_object(config_class)
 
-    # Configurar el motor de plantillas
+    # Configurar motor de plantillas
     app.jinja_loader = ChoiceLoader([
         FileSystemLoader(str(TEMPLATES_DIR)),
     ])
@@ -30,11 +30,14 @@ def create_app(config_class=DevelopmentConfig):
     # Inicializar SQLAlchemy
     db.init_app(app)
 
+    # IMPORTANTE: Importar modelos ANTES de crear tablas
+    from . import models   # ← ← ← ESTA LÍNEA ES LA CLAVE
+
     # Registrar blueprints
     from .routes import bp
     app.register_blueprint(bp)
 
-    # Crear tablas si no existen (solo en desarrollo)
+    # Crear tablas solo en desarrollo
     with app.app_context():
         db.create_all()
 

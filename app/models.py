@@ -1,1 +1,157 @@
-from flask import Flask
+from datetime import datetime
+from . import db
+
+# ============================================================
+#  ESPECIALIDADES MÉDICAS
+# ============================================================
+class Especialidad(db.Model):
+    __tablename__ = 'especialidades'
+
+    id = db.Column(db.Integer, primary_key=True)
+    nombre = db.Column(db.String(100), nullable=False)
+    descripcion = db.Column(db.Text, nullable=False)
+    duracion_min = db.Column(db.Integer, nullable=False)
+    precio_base = db.Column(db.Float, nullable=False)
+    estado = db.Column(db.String(20), default="Activo")
+    fecha_registro = db.Column(db.DateTime, default=datetime.utcnow)
+
+    citas = db.relationship("Cita", back_populates="especialidad")
+    medicos = db.relationship("Medico", back_populates="especialidad")
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "nombre": self.nombre,
+            "descripcion": self.descripcion,
+            "duracion_min": self.duracion_min,
+            "precio_base": self.precio_base,
+            "estado": self.estado,
+            "fecha_registro": self.fecha_registro.strftime("%Y-%m-%d %H:%M:%S")
+        }
+
+    def __repr__(self):
+        return f'<Especialidad {self.nombre}>'
+
+
+# ============================================================
+#  MÉDICOS
+# ============================================================
+class Medico(db.Model):
+    __tablename__ = 'medicos'
+
+    id = db.Column(db.Integer, primary_key=True)
+    nombres = db.Column(db.String(120), nullable=False)
+    apellidos = db.Column(db.String(120), nullable=False)
+    dui = db.Column(db.String(15), unique=True, nullable=False)
+    telefono = db.Column(db.String(20))
+    email = db.Column(db.String(120))
+    estado = db.Column(db.String(20), default="Activo")
+
+    especialidad_id = db.Column(db.Integer, db.ForeignKey('especialidades.id'), nullable=False)
+
+    especialidad = db.relationship("Especialidad", back_populates="medicos")
+    citas = db.relationship("Cita", back_populates="medico")
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "nombres": self.nombres,
+            "apellidos": self.apellidos,
+            "dui": self.dui,
+            "telefono": self.telefono,
+            "email": self.email,
+            "estado": self.estado,
+            "especialidad_id": self.especialidad_id,
+            "especialidad": self.especialidad.nombre if self.especialidad else None
+        }
+
+    def __repr__(self):
+        return f'<Medico {self.nombres} {self.apellidos}>'
+
+
+# ============================================================
+#  PACIENTES
+# ============================================================
+class Paciente(db.Model):
+    __tablename__ = 'pacientes'
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+
+    nombre = db.Column(db.String(120), nullable=False)
+    apellido = db.Column(db.String(120), nullable=False)
+    dui = db.Column(db.String(15), unique=True, nullable=False)
+
+    fecha_nac = db.Column(db.Date)
+    fecha_registro = db.Column(db.DateTime, default=datetime.utcnow)
+
+    telefono = db.Column(db.String(20))
+    correo = db.Column(db.String(120))
+    direccion = db.Column(db.String(250))
+    genero = db.Column(db.String(10))
+    observaciones = db.Column(db.Text)
+    estado = db.Column(db.String(20), default="Activo")
+
+    citas = db.relationship("Cita", back_populates="paciente")
+
+    __table_args__ = (
+        db.UniqueConstraint('dui', name='uq_paciente_dui'),
+    )
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "nombre": self.nombre,
+            "apellido": self.apellido,  # << AQUÍ ESTÁ LO QUE LE FALTABA A TU API
+            "dui": self.dui,
+            "fecha_nac": self.fecha_nac.strftime("%Y-%m-%d") if self.fecha_nac else None,
+            "telefono": self.telefono,
+            "correo": self.correo,
+            "direccion": self.direccion,
+            "genero": self.genero,
+            "observaciones": self.observaciones,
+            "estado": self.estado
+        }
+
+    def __repr__(self):
+        return f'<Paciente {self.nombre}>'
+
+
+# ============================================================
+#  CITAS MÉDICAS
+# ============================================================
+class Cita(db.Model):
+    __tablename__ = "citas"
+
+    id = db.Column(db.Integer, primary_key=True)
+    fecha = db.Column(db.Date)
+    hora = db.Column(db.Time)
+    duracion_min = db.Column(db.Integer)
+    estado = db.Column(db.String(20))
+    detalles = db.Column(db.Text)
+
+    paciente_id = db.Column(db.Integer, db.ForeignKey("pacientes.id"))
+    medico_id = db.Column(db.Integer, db.ForeignKey("medicos.id"))
+    especialidad_id = db.Column(db.Integer, db.ForeignKey("especialidades.id"))
+
+    paciente = db.relationship("Paciente", back_populates="citas")
+    medico = db.relationship("Medico", back_populates="citas")
+    especialidad = db.relationship("Especialidad", back_populates="citas")
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "fecha": self.fecha.strftime("%Y-%m-%d") if self.fecha else None,
+            "hora": self.hora.strftime("%H:%M") if self.hora else None,
+            "duracion_min": self.duracion_min,
+            "estado": self.estado,
+            "detalles": self.detalles,
+            "paciente_id": self.paciente_id,
+            "medico_id": self.medico_id,
+            "especialidad_id": self.especialidad_id,
+            "paciente": f"{self.paciente.nombre} {self.paciente.apellido}" if self.paciente else None,
+            "medico": f"{self.medico.nombres} {self.medico.apellidos}" if self.medico else None,
+            "especialidad": self.especialidad.nombre if self.especialidad else None
+        }
+
+    def __repr__(self):
+        return f'<Cita {self.id}>'

@@ -22,19 +22,19 @@ header { background: transparent; }
 
 /* Cabecera con color suave */
 .table thead th {
-  background: #b4d9ff; /* tu header */
+  background: #b4d9ff; 
   font-weight: 600;
   position: sticky;
   top: 0;
   z-index: 2;
 }
 
-/* Alternado blanco / gris por fila (se aplica independientemente de cómo se generen) */
+
 #cuerpoAgenda tr:nth-child(odd) {
   background-color: #ffffff;
 }
 #cuerpoAgenda tr:nth-child(even) {
-  background-color: #e9ecef; /* gris suave */
+  background-color: #e9ecef;
 }
 
 /* Separador izquierdo (col Hora) */
@@ -66,13 +66,13 @@ header { background: transparent; }
 
 /* --- Altura de las filas --- */
 #cuerpoAgenda td {
-  height: 70px; /* Puedes ajustar a 80px o 100px si lo prefieres */
+  height: 70px; 
   position: relative;
 }
 
 /* --- Estilo de la "carta" (cita) dentro de una celda --- */
 .cita-card {
-  background-color: #007bff; /* Azul Bootstrap */
+  background-color: #838588; /* Azul Bootstrap */
   color: white;
   border-radius: 8px;
   padding: 6px 8px;
@@ -89,6 +89,6 @@ header { background: transparent; }
 }
 
 .cita-card:hover {
-  background-color: #0056b3;
+  background-color: #1c6c71;
   transform: translate(-50%, -50%) scale(1.05);
 }

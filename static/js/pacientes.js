@@ -1,118 +1,169 @@
-// --- VARIABLES PRINCIPALES ---
-let pacientes = [];
-let pacienteSeleccionadoIndex = null;
+// --- VARIABLES ---
+let todosLosPacientes = [];
+const form = document.getElementById("pacienteForm");
+const tbody = document.getElementById("tablaPacientesBody");
+const alertContainer = document.getElementById("alertContainer");
 
-const form = document.getElementById('pacienteForm');
-const tablaBody = document.getElementById('tablaPacientesBody');
-const alertContainer = document.getElementById('alertContainer');
+// ----------------------------------------------
+// 1) CARGAR PACIENTES DESDE LA BD
+// ----------------------------------------------
+function cargarPacientes() {
+    fetch("/api/pacientes")
+        .then(r => r.json())
+        .then(data => {
+            todosLosPacientes = data;
+            renderizarTabla(todosLosPacientes);
+        })
+        .catch(err => console.error("Error cargando:", err));
+}
 
-// --- FUNCIONES PRINCIPALES ---
+// ----------------------------------------------
+// 2) MOSTRAR TABLA
+// ----------------------------------------------
+function renderizarTabla(lista) {
+    tbody.innerHTML = "";
 
-// 1. Manejar envío del formulario (Guardar/Actualizar)
-form.addEventListener('submit', (e) => {
-  e.preventDefault();
+    lista.forEach(p => {
+        const fila = `
+            <tr>
+                <td>${p.nombre}</td>
+                <td>${p.apellido}</td>
+                <td>${p.dui}</td>
+                <td>${p.fecha_nac}</td>
+                <td>${p.telefono}</td>
+                <td>${p.correo}</td>
+                <td>${p.genero === "M" ? "Masculino" : "Femenino"}</td>
+                <td>${p.observaciones}</td>
+                <td>${p.direccion}</td>
+                <td>${p.estado}</td>
+                <td>
+                    <button class="btn btn-warning btn-sm" onclick="editarPaciente(${p.id})">
+                        <i class="bi bi-pencil-square"></i>
+                    </button>
+                    <button class="btn btn-danger btn-sm" onclick="eliminarPaciente(${p.id})">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        `;
+        tbody.innerHTML += fila;
+    });
+}
 
-  const nuevoPaciente = {
-    nombre: document.getElementById('nombre').value.trim(),
-    dui: document.getElementById('dui').value.trim(),
-    fechaNacimiento: document.getElementById('fechaNacimiento').value,
-    telefono: document.getElementById('telefono').value.trim(),
-    correo: document.getElementById('correo').value.trim(),
-    direccion: document.getElementById('direccion').value.trim(),
-    genero: document.getElementById('genero').value,
-    estado: document.getElementById('estado').value,
-    observaciones: document.getElementById('observaciones').value.trim()
-  };
+// ----------------------------------------------
+// 3) CARGAR PACIENTE EN FORMULARIO
+// ----------------------------------------------
+function editarPaciente(id) {
+    const p = todosLosPacientes.find(x => x.id == id);
+    if (!p) return;
 
-  if (pacienteSeleccionadoIndex !== null) {
-    pacientes[pacienteSeleccionadoIndex] = nuevoPaciente;
-    pacienteSeleccionadoIndex = null;
-    showAlert('Paciente actualizado correctamente', 'success');
-  } else {
-    pacientes.push(nuevoPaciente);
-    showAlert('Paciente registrado correctamente', 'success');
-  }
+    document.getElementById("id_paciente").value = p.id;
+    document.getElementById("nombre").value = p.nombre;
+    document.getElementById("apellido").value = p.apellido;
+    document.getElementById("dui").value = p.dui;
+    document.getElementById("fechaNacimiento").value = p.fecha_nac;
+    document.getElementById("telefono").value = p.telefono;
+    document.getElementById("correo").value = p.correo;
+    document.getElementById("genero").value = p.genero;
+    document.getElementById("estado").value = p.estado;
+    document.getElementById("direccion").value = p.direccion;
+    document.getElementById("observaciones").value = p.observaciones;
 
-  form.reset();
-  renderTabla();
+    document.getElementById("btnGuardar").innerHTML =
+        `<i class="bi bi-arrow-repeat"></i> Actualizar`;
+}
+
+// ----------------------------------------------
+// 4) GUARDAR / ACTUALIZAR
+// ----------------------------------------------
+form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const id = document.getElementById("id_paciente").value;
+
+    // 🔥 IMPORTANTE: los nombres deben ser IGUALES al backend
+    const paciente = {
+        nombre: document.getElementById("nombre").value,
+        apellido: document.getElementById("apellido").value,
+        dui: document.getElementById("dui").value,
+        fecha_nac: document.getElementById("fechaNacimiento").value,
+        telefono: document.getElementById("telefono").value,
+        correo: document.getElementById("correo").value,
+        genero: document.getElementById("genero").value,
+        estado: document.getElementById("estado").value,
+        direccion: document.getElementById("direccion").value,
+        observaciones: document.getElementById("observaciones").value
+    };
+
+    const url = id ? `/api/pacientes/${id}` : `/api/pacientes`;
+    const method = id ? "PUT" : "POST";
+
+    fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(paciente)
+    })
+        .then(r => r.json())
+        .then(data => {
+            mostrarAlerta("success", data.message || "Guardado exitoso");
+            form.reset();
+            document.getElementById("id_paciente").value = "";
+            document.getElementById("btnGuardar").innerHTML =
+                `<i class="bi bi-save"></i> Guardar`;
+            cargarPacientes();
+        })
+        .catch(err => mostrarAlerta("danger", "Error al guardar"));
 });
 
-// 2. Renderizar la tabla
-function renderTabla() {
-  tablaBody.innerHTML = '';
+// ----------------------------------------------
+// 5) ELIMINAR
+// ----------------------------------------------
+function eliminarPaciente(id) {
+    if (!confirm("¿Eliminar paciente?")) return;
 
-  pacientes.forEach((paciente, index) => {
-    const tr = document.createElement('tr');
+    fetch(`/api/pacientes/${id}`, { method: "DELETE" })
+        .then(r => r.json())
+        .then(data => {
+            mostrarAlerta("success", data.message || "Eliminado correctamente");
+            cargarPacientes();
+        })
+        .catch(() => mostrarAlerta("danger", "Error al eliminar"));
+}
 
-    tr.innerHTML = `
-      <td>${paciente.nombre}</td>
-      <td>${paciente.dui}</td>
-      <td>${paciente.fechaNacimiento}</td>
-      <td>${paciente.telefono}</td>
-      <td>${paciente.correo}</td>
-      <td>${paciente.genero}</td>
-      <td>${paciente.estado}</td>
-      <td>
-        <button class="btn btn-warning btn-editar btn-sm">
-          <i class="bi bi-pencil-square"></i> Editar
-        </button>
-        <button class="btn btn-danger btn-eliminar btn-sm">
-          <i class="bi bi-trash"></i> Eliminar
-        </button>
-      </td>
-    `;
+// ----------------------------------------------
+// 6) FILTRAR PACIENTES
+// ----------------------------------------------
+function filtrarPacientes() {
+    const filtroNombre = document.getElementById("inputFiltroNombreApellido").value.toLowerCase();
+    const filtroDui = document.getElementById("inputFiltroDui").value.toLowerCase();
 
-    // Botón Editar
-    tr.querySelector('.btn-editar').addEventListener('click', (e) => {
-      e.stopPropagation();
-      pacienteSeleccionadoIndex = index;
-      cargarPacienteEnFormulario(paciente);
+    const filtrados = todosLosPacientes.filter(p => {
+        const nombreCompleto = `${p.nombre} ${p.apellido}`.toLowerCase();
+        return (
+            nombreCompleto.includes(filtroNombre) &&
+            p.dui.toLowerCase().includes(filtroDui)
+        );
     });
 
-    // Botón Eliminar
-    tr.querySelector('.btn-eliminar').addEventListener('click', (e) => {
-      e.stopPropagation();
-      if (confirm('¿Desea eliminar este paciente?')) {
-        pacientes.splice(index, 1);
-        pacienteSeleccionadoIndex = null;
-        renderTabla();
-        showAlert('Paciente eliminado correctamente', 'danger');
-      }
-    });
-
-    tablaBody.appendChild(tr);
-  });
+    renderizarTabla(filtrados);
 }
 
-// 3. Cargar datos en formulario para edición
-function cargarPacienteEnFormulario(paciente) {
-  document.getElementById('nombre').value = paciente.nombre;
-  document.getElementById('dui').value = paciente.dui;
-  document.getElementById('fechaNacimiento').value = paciente.fechaNacimiento;
-  document.getElementById('telefono').value = paciente.telefono;
-  document.getElementById('correo').value = paciente.correo;
-  document.getElementById('direccion').value = paciente.direccion;
-  document.getElementById('genero').value = paciente.genero;
-  document.getElementById('estado').value = paciente.estado;
-  document.getElementById('observaciones').value = paciente.observaciones;
+// Eventos de filtros
+document.getElementById("inputFiltroNombreApellido").addEventListener("input", filtrarPacientes);
+document.getElementById("inputFiltroDui").addEventListener("input", filtrarPacientes);
+
+// ----------------------------------------------
+// 7) ALERTAS
+// ----------------------------------------------
+function mostrarAlerta(tipo, mensaje) {
+    alertContainer.innerHTML = `
+        <div class="alert alert-${tipo} alert-dismissible fade show">
+            ${mensaje}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>`;
 }
 
-// 4. Mostrar alertas de Bootstrap
-function showAlert(mensaje, tipo) {
-  alertContainer.innerHTML = `
-    <div class="alert alert-${tipo} alert-dismissible fade show" role="alert">
-      ${mensaje}
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-  `;
-}
-
-// --- INICIALIZACIÓN ---
-document.addEventListener('DOMContentLoaded', () => {
-  if (!form || !tablaBody || !alertContainer) {
-    console.error('Error: Faltan elementos HTML necesarios.');
-    return;
-  }
-
-  renderTabla();
-});
+// ----------------------------------------------
+// 8) INICIO
+// ----------------------------------------------
+document.addEventListener("DOMContentLoaded", cargarPacientes);
