@@ -8,89 +8,135 @@
 {% endblock %}
 
 {% block content %}
+
+<!-- Encabezado -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-semibold text-primary">
+      <i class="bi bi-clipboard-plus"></i> Registrar / Editar Pacientes
+    </h2>
+  </div>  
+
 <div class="form-container">
-  <h3 class="text-center mb-3">Registro de Pacientes</h3>
 
   <!-- ALERTAS -->
   <div id="alertContainer"></div>
 
   <!-- FORMULARIO RESPONSIVE -->
+  <div class="card mb-4 shadow-sm">
+  <div class="card-body">
   <form id="pacienteForm">
+    <input type="hidden" id="id_paciente" name="id_paciente">
     <div class="row g-3">
       <div class="col-12 col-md-4">
-        <label for="nombre">Nombre</label>
+        <label for="nombre">Nombre:</label>
         <input type="text" id="nombre" class="form-control" placeholder="Nombre" required>
       </div>
       <div class="col-12 col-md-4">
-        <label for="dui">DUI</label>
-        <input type="text" id="dui" class="form-control" placeholder="00000000-0" required pattern="^[0-9]{8}-[0-9]{1}$">
+        <label for="apellido">Apellido:</label>
+        <input type="text" id="apellido" class="form-control" placeholder="Apellido" required>
       </div>
       <div class="col-12 col-md-4">
-        <label for="fechaNacimiento">Fecha Nac.</label>
-        <input type="date" id="fechaNacimiento" class="form-control" required>
-      </div>
+    <label for="dui">DUI:</label>
+    <input type="text" id="dui" class="form-control"
+           placeholder="00000000-0"
+           required
+           maxlength="10"
+           pattern="^[0-9]{8}-[0-9]{1}$">
+</div>
 
       <div class="col-12 col-md-4">
-        <label for="telefono">Teléfono</label>
-        <input type="tel" id="telefono" class="form-control" placeholder="0000-0000" required pattern="^[0-9]{4}-[0-9]{4}$">
-      </div>
+    <label for="fechaNacimiento">Fecha de nacimiento:</label>
+    <input type="date" id="fechaNacimiento" class="form-control" required>
+</div>
+
+     <div class="col-12 col-md-4">
+    <label for="telefono">Teléfono:</label>
+    <input type="tel" id="telefono" name="telefono" class="form-control"
+           placeholder="0000-0000"
+           required
+           maxlength="9"
+           pattern="^[0-9]{4}-[0-9]{4}$">
+</div>
+
       <div class="col-12 col-md-4">
-        <label for="correo">Correo</label>
+        <label for="correo">Correo:</label>
         <input type="email" id="correo" class="form-control" placeholder="ejemplo@correo.com" required>
       </div>
       <div class="col-12 col-md-4">
-        <label for="genero">Género</label>
+        <label for="genero">Género:</label>
         <select id="genero" class="form-select" required>
           <option value="">Seleccione...</option>
-          <option>Masculino</option>
-          <option>Femenino</option>
+          <option value="M">Masculino</option>
+          <option value="F">Femenino</option>
         </select>
       </div>
+      <div class="col-12 col-md-4">
+        <label for="estado">Estado:</label>
+        <select id="estado" class="form-select" required>
+          <option value="Activo">Activo</option>
+          <option value="Inactivo">Inactivo</option>
+        </select>
+      </div>
+      <div class="col-12 col-md-4">
+        <label for="direccion">Dirección:</label>
+        <input type="text" id="direccion" class="form-control" placeholder="Dirección" required>
+      </div>
+      <div class="col-12 col-md-4">
+    <label for="observaciones">Observaciones:</label>
+    <textarea id="observaciones" class="form-control" placeholder="Observaciones" rows="3" required></textarea>
+</div>
 
-      <div class="col-12 col-md-4">
-        <label for="estado">Estado</label>
-        <select id="estado" class="form-select">
-          <option>Activo</option>
-          <option>Inactivo</option>
-        </select>
-      </div>
-      <div class="col-12 col-md-4">
-        <label for="direccion">Dirección</label>
-        <input type="text" id="direccion" class="form-control" placeholder="Dirección">
-      </div>
-      <div class="col-12 col-md-4">
-        <label for="observaciones">Observaciones</label>
-        <input type="text" id="observaciones" class="form-control" placeholder="Observaciones">
-      </div>
     </div>
 
     <!-- BOTONES -->
     <div class="form-buttons mt-3 text-end">
-      <button type="submit" class="btn btn-primary">
+      <button type="submit" class="btn btn-primary" id="btnGuardar">
         <i class="bi bi-save"></i> Guardar
       </button>
-      <button type="reset" class="btn btn-secondary">
+      <button type="reset" class="btn btn-secondary" id="btnLimpiar">
         <i class="bi bi-x-circle"></i> Limpiar
       </button>
     </div>
   </form>
 </div>
+</div>
+</div>
+
+<div class="card mb-4 shadow-sm">
+  <div class="card-header fw-semibold">Filtros de búsqueda</div>
+  <div class="card-body">
+    <form class="row g-3">
+      <div class="col-md-4">
+        <label for="inputFiltroNombreApellido" class="form-label">Nombre ó apellido:</label>
+        <input type="text" id="inputFiltroNombreApellido" class="form-control" placeholder="Ingrese nombre o apellido">
+      </div>
+      <div class="col-md-4">
+        <label for="inputFiltroDui" class="form-label">Dui:</label>
+        <input type="text" id="inputFiltroDui" class="form-control" placeholder="Dui">
+      </div>
+    </form>
+  </div>
+</div>
 
 <!-- TABLA DE PACIENTES RESPONSIVE -->
-<div class="table-container mt-4">
-  <h5 class="text-center mb-2">Pacientes Registrados</h5>
-  <div class="table-responsive">
-    <table class="table table-striped table-hover align-middle">
-      <thead class="table-header">
-        <tr>
+ <div class="card shadow-sm">
+  <div class="card-header fw-semibold">Listado de pacientes</div>
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle">
+        <thead class="table-primary">
+          <tr>
           <th>Nombre</th>
-          <th>DUI</th>
-          <th>Fecha Nac.</th>
+          <th>Apellido</th>
+          <th>Dui</th>
+          <th>Fecha de nac.</th>
           <th>Teléfono</th>
           <th>Correo</th>
           <th>Género</th>
+          <th>Observaciones</th>
+          <th>Direccion</th>
           <th>Estado</th>
-          <th>Acciones</th>
+          <th></th>
         </tr>
       </thead>
       <tbody id="tablaPacientesBody">
@@ -99,7 +145,267 @@
     </table>
   </div>
 </div>
+</div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="{{ url_for('static', filename='js/pacientes.js') }}"></script>
+<script>
+// --- UTILIDADES ---
+function mostrarAlerta(tipo, mensaje) {
+    const alertContainer = document.getElementById('alertContainer');
+    alertContainer.innerHTML = `<div class="alert alert-${tipo}">${mensaje}</div>`;
+    setTimeout(() => { alertContainer.innerHTML = ''; }, 4000);
+}
+
+// Variable global para almacenar los datos originales de los pacientes
+let todosLosPacientes = [];
+
+// --- GET: LISTAR PACIENTES (Modificada) ---
+function cargarPacientes() {
+    fetch('/api/pacientes')
+    .then(response => response.json())
+    .then(data => {
+        // Almacenar los datos originales y luego renderizarlos
+        todosLosPacientes = data; 
+        renderizarTabla(todosLosPacientes);
+    });
+}
+
+// --- NUEVA FUNCIÓN: Renderiza los datos en la tabla ---
+function renderizarTabla(pacientesAMostrar) {
+    const tbody = document.getElementById('tablaPacientesBody');
+    tbody.innerHTML = '';
+    pacientesAMostrar.forEach(paciente => {
+        let fila = `
+            <tr>
+              <td>${paciente.nombre}</td>
+              <td>${paciente.apellido}</td>
+              <td>${paciente.dui}</td>
+              <td>${paciente.fecha_nacimiento}</td>
+              <td>${paciente.telefono}</td>
+              <td>${paciente.email}</td>
+              <td>${paciente.genero === "M" ? "Masculino" : "Femenino"}</td>
+              <td>${paciente.observaciones}</td>
+              <td>${paciente.direccion}</td>
+              <td>${paciente.estado}</td>
+              <td>
+                <button class="btn btn-warning btn-sm me-2" onclick="editarPaciente('${paciente.id_paciente}')"><i class="bi bi-pencil-square"></i></button>
+                <button class="btn btn-danger btn-sm" onclick="eliminarPaciente('${paciente.id_paciente}')"><i class="bi bi-trash"></i></button>
+              </td>
+            </tr>
+        `;
+        tbody.innerHTML += fila;
+    });
+}
+
+// --- NUEVA FUNCIÓN: Filtrar pacientes ---
+function filtrarPacientes() {
+    const filtroNombreApellido = document.getElementById('inputFiltroNombreApellido').value.toLowerCase();
+    const filtroDui = document.getElementById('inputFiltroDui').value.toLowerCase();
+
+    // Filtra la lista completa (todosLosPacientes)
+    const pacientesFiltrados = todosLosPacientes.filter(paciente => {
+        const nombreCompleto = `${paciente.nombre} ${paciente.apellido}`.toLowerCase();
+        
+        // Comprueba si el nombre/apellido O el Dui coinciden
+        const coincideNombre = nombreCompleto.includes(filtroNombreApellido);
+        const coincideDui = paciente.dui.toLowerCase().includes(filtroDui);
+
+        // Devuelve true solo si ambos filtros (si están presentes) coinciden
+        return coincideNombre && coincideDui;
+    });
+
+    // Vuelve a renderizar la tabla con los resultados filtrados
+    renderizarTabla(pacientesFiltrados);
+}
+
+
+// FUNCIÓN AÑADIDA: EDITAR PACIENTE (Cargar datos al formulario)
+
+function editarPaciente(idPaciente) {
+    // Busca el paciente por ID en la lista global de pacientes cargados
+    const pacienteAEditar = todosLosPacientes.find(p => p.id_paciente == idPaciente);
+
+    if (pacienteAEditar) {
+        // Carga los datos en los campos del formulario
+        document.getElementById('id_paciente').value = pacienteAEditar.id_paciente;
+        document.getElementById('nombre').value = pacienteAEditar.nombre;
+        document.getElementById('apellido').value = pacienteAEditar.apellido;
+        document.getElementById('dui').value = pacienteAEditar.dui;
+        document.getElementById('fechaNacimiento').value = pacienteAEditar.fecha_nacimiento;
+        document.getElementById('telefono').value = pacienteAEditar.telefono;
+        document.getElementById('correo').value = pacienteAEditar.email;
+        document.getElementById('genero').value = pacienteAEditar.genero;
+        document.getElementById('estado').value = pacienteAEditar.estado;
+        document.getElementById('direccion').value = pacienteAEditar.direccion;
+        document.getElementById('observaciones').value = pacienteAEditar.observaciones;
+
+        // Cambia el texto del botón principal para indicar modo "Actualizar"
+        document.getElementById('btnGuardar').innerHTML = '<i class="bi bi-arrow-repeat"></i> Actualizar';
+        document.getElementById('btnGuardar').classList.remove('btn-primary');
+        document.getElementById('btnGuardar').classList.add('btn-success');
+        
+        // Desplázate al formulario para que el usuario pueda empezar a editar inmediatamente
+        window.scrollTo(0, 0); 
+    } else {
+        mostrarAlerta('danger', 'Paciente no encontrado para editar.');
+    }
+}
+
+
+// FUNCIÓN AÑADIDA: ELIMINAR PACIENTE
+
+function eliminarPaciente(idPaciente) {
+    if (confirm('¿Está seguro de que desea eliminar este paciente? Esta acción no se puede deshacer.')) {
+        fetch(`/api/pacientes/${idPaciente}`, {
+            method: 'DELETE',
+        })
+        .then(response => {
+            if (!response.ok) {
+                // Maneja errores de API (ej. 404, 500)
+                return response.json().then(err => { throw new Error(err.mensaje || 'Error al eliminar'); });
+            }
+            return response.json();
+        })
+        .then(data => {
+            mostrarAlerta('success', data.mensaje || 'Paciente eliminado correctamente.');
+            cargarPacientes(); // Vuelve a cargar la tabla para reflejar los cambios
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            mostrarAlerta('danger', error.message || 'Hubo un problema al eliminar el paciente.');
+        });
+    }
+}
+
+
+// --- POST/PUT: GUARDAR O EDITAR PACIENTE (Completada) ---
+document.getElementById('pacienteForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    // Obtener los datos del formulario
+    const paciente = {
+        nombre: document.getElementById('nombre').value,
+        apellido: document.getElementById('apellido').value,
+        dui: document.getElementById('dui').value,
+        fecha_nacimiento: document.getElementById('fechaNacimiento').value,
+        telefono: document.getElementById('telefono').value,
+        email: document.getElementById('correo').value, // Corregido 'correo' a 'email' si tu API lo espera así
+        genero: document.getElementById('genero').value,
+        estado: document.getElementById('estado').value,
+        direccion: document.getElementById('direccion').value,
+        observaciones: document.getElementById('observaciones').value,
+    };
+    
+    // Verificar si estamos editando (si hay un ID oculto)
+    const id_paciente = document.getElementById('id_paciente').value;
+    const method = id_paciente ? 'PUT' : 'POST';
+    const url = id_paciente ? `/api/pacientes/${id_paciente}` : '/api/pacientes';
+
+
+    fetch(url, {
+        method: method,
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(paciente),
+    })
+    .then(response => {
+        if (!response.ok) {
+            // Maneja errores de API (ej. validación, 404, 500)
+             return response.json().then(err => { throw new Error(err.mensaje || 'Error en la solicitud'); });
+        }
+        return response.json();
+    })
+    .then(data => {
+        mostrarAlerta('success', data.mensaje || 'Operación completada con éxito.');
+        // Limpiar el formulario y resetear el botón después de guardar/actualizar
+        document.getElementById('pacienteForm').reset();
+        document.getElementById('btnGuardar').innerHTML = '<i class="bi bi-save"></i> Guardar';
+        document.getElementById('btnGuardar').classList.remove('btn-success');
+        document.getElementById('btnGuardar').classList.add('btn-primary');
+        // Asegúrate de que el ID oculto se borre al limpiar el formulario
+        document.getElementById('id_paciente').value = ''; 
+        cargarPacientes(); // Vuelve a cargar la tabla para reflejar los cambios
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        mostrarAlerta('danger', error.message || 'Hubo un problema con la operación.');
+    });
+});
+
+
+// --- EVENT LISTENERS PARA FILTROS Y CARGA INICIAL ---
+document.getElementById('inputFiltroNombreApellido').addEventListener('input', filtrarPacientes);
+document.getElementById('inputFiltroDui').addEventListener('input', filtrarPacientes);
+document.addEventListener('DOMContentLoaded', cargarPacientes);
+
+// --- VALIDACIÓN TELÉFONO ---
+document.addEventListener("DOMContentLoaded", function () {
+    const tel = document.getElementById("telefono");
+
+    if (tel) {
+        tel.addEventListener("input", function () {
+            // Quitar todo lo que no sea número
+            let valor = tel.value.replace(/[^0-9]/g, "");
+
+            // Insertar guion automáticamente cuando llegue a 4 dígitos
+            if (valor.length > 4) {
+                valor = valor.slice(0, 4) + "-" + valor.slice(4, 8);
+            }
+
+            // Limitar longitud total
+            tel.value = valor.slice(0, 9);
+        });
+    }
+});
+
+// --- VALIDACIÓN DUI ---
+document.addEventListener("DOMContentLoaded", function () {
+    const dui = document.getElementById("dui");
+
+    if (dui) {
+        dui.addEventListener("input", function () {
+            // Quitar todo lo que no sea número
+            let valor = dui.value.replace(/[^0-9]/g, "");
+
+            // Insertar guion automáticamente en posición 8
+            if (valor.length > 8) {
+                valor = valor.slice(0, 8) + "-" + valor.slice(8, 9);
+            }
+
+            // Limitar a 10 caracteres (8 números + guion + 1 número)
+            dui.value = valor.slice(0, 10);
+        });
+    }
+});
+// --- VALIDACIÓN FECHA DE NACIMIENTO ---
+document.addEventListener("DOMContentLoaded", function () {
+    const fechaNacimiento = document.getElementById("fechaNacimiento");
+    if (fechaNacimiento) {
+        const hoy = new Date().toISOString().split("T")[0]; // obtiene YYYY-MM-DD
+        fechaNacimiento.setAttribute("max", hoy); // no permite fechas futuras
+    }
+});
+// --- VALIDACIÓN NOMBRE Y APELLIDO ---
+document.addEventListener("DOMContentLoaded", function () {
+    const nombre = document.getElementById("nombre");
+    const apellido = document.getElementById("apellido");
+
+    [nombre, apellido].forEach(campo => {
+        if (campo) {
+            campo.addEventListener("input", function () {
+                // Solo letras, acentos y espacios
+                this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚüÜ\s]/g, "");
+            });
+        }
+    });
+});
+</script>
+<script>
 {% endblock %}
+
+
+
+
+

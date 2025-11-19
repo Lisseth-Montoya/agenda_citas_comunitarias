@@ -51,6 +51,7 @@ function renderTabla() {
       <td>${paciente.telefono}</td>
       <td>${paciente.correo}</td>
       <td>${paciente.genero}</td>
+      <td>${paciente.direccion}</td>
       <td>${paciente.estado}</td>
       <td>
         <button class="btn btn-warning btn-editar btn-sm">
