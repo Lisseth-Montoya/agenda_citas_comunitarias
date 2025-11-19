@@ -358,6 +358,7 @@ def api_especialidades_eliminar(id):
 # CRUD PACIENTES
 # =====================================================
 
+
 @bp.route("/api/pacientes")
 def api_listar_pacientes():
     pacientes = Paciente.query.all()
@@ -365,6 +366,7 @@ def api_listar_pacientes():
         {
             "id": p.id,
             "nombre": p.nombre,
+            "apellido": p.apellido,   
             "dui": p.dui,
             "telefono": p.telefono,
             "correo": p.correo,
@@ -376,12 +378,14 @@ def api_listar_pacientes():
         } for p in pacientes
     ])
 
+
 @bp.route("/api/pacientes/<int:id>", methods=['GET'])
 def api_detalle_paciente(id):
     p = Paciente.query.get_or_404(id)
     return jsonify({
         "id": p.id,
         "nombre": p.nombre,
+        "apellido": p.apellido,  
         "dui": p.dui,
         "telefono": p.telefono,
         "correo": p.correo,
@@ -392,12 +396,14 @@ def api_detalle_paciente(id):
         "fecha_nac": p.fecha_nac.strftime('%Y-%m-%d') if p.fecha_nac else ""
     })
 
+
 @bp.route("/api/pacientes", methods=['POST'])
 def api_crear_paciente():
     data = request.json
     try:
         p = Paciente(
             nombre=data['nombre'],
+            apellido=data['apellido'],   
             dui=data['dui'],
             telefono=data['telefono'],
             correo=data['correo'],
@@ -414,12 +420,15 @@ def api_crear_paciente():
         db.session.rollback()
         return jsonify({"status": "error", "message": str(e)}), 400
 
+
 @bp.route("/api/pacientes/<int:id>", methods=['PUT'])
 def api_editar_paciente(id):
     data = request.json
     try:
         p = Paciente.query.get_or_404(id)
+
         p.nombre = data['nombre']
+        p.apellido = data['apellido']     
         p.dui = data['dui']
         p.telefono = data['telefono']
         p.correo = data['correo']
@@ -428,11 +437,13 @@ def api_editar_paciente(id):
         p.estado = data['estado']
         p.observaciones = data['observaciones']
         p.fecha_nac = datetime.strptime(data['fecha_nac'], '%Y-%m-%d')
+
         db.session.commit()
         return jsonify({"status": "success", "message": "Paciente actualizado correctamente."})
     except Exception as e:
         db.session.rollback()
         return jsonify({"status": "error", "message": str(e)}), 400
+
 
 @bp.route("/api/pacientes/<int:id>", methods=['DELETE'])
 def api_eliminar_paciente(id):

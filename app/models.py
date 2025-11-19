@@ -18,6 +18,17 @@ class Especialidad(db.Model):
     citas = db.relationship("Cita", back_populates="especialidad")
     medicos = db.relationship("Medico", back_populates="especialidad")
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "nombre": self.nombre,
+            "descripcion": self.descripcion,
+            "duracion_min": self.duracion_min,
+            "precio_base": self.precio_base,
+            "estado": self.estado,
+            "fecha_registro": self.fecha_registro.strftime("%Y-%m-%d %H:%M:%S")
+        }
+
     def __repr__(self):
         return f'<Especialidad {self.nombre}>'
 
@@ -41,6 +52,19 @@ class Medico(db.Model):
     especialidad = db.relationship("Especialidad", back_populates="medicos")
     citas = db.relationship("Cita", back_populates="medico")
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "nombres": self.nombres,
+            "apellidos": self.apellidos,
+            "dui": self.dui,
+            "telefono": self.telefono,
+            "email": self.email,
+            "estado": self.estado,
+            "especialidad_id": self.especialidad_id,
+            "especialidad": self.especialidad.nombre if self.especialidad else None
+        }
+
     def __repr__(self):
         return f'<Medico {self.nombres} {self.apellidos}>'
 
@@ -54,7 +78,7 @@ class Paciente(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 
     nombre = db.Column(db.String(120), nullable=False)
-    apellido = db.Column(db.String(120), nullable=False)  # obligatorio
+    apellido = db.Column(db.String(120), nullable=False)
     dui = db.Column(db.String(15), unique=True, nullable=False)
 
     fecha_nac = db.Column(db.Date)
@@ -72,6 +96,21 @@ class Paciente(db.Model):
     __table_args__ = (
         db.UniqueConstraint('dui', name='uq_paciente_dui'),
     )
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "nombre": self.nombre,
+            "apellido": self.apellido,  # << AQUÍ ESTÁ LO QUE LE FALTABA A TU API
+            "dui": self.dui,
+            "fecha_nac": self.fecha_nac.strftime("%Y-%m-%d") if self.fecha_nac else None,
+            "telefono": self.telefono,
+            "correo": self.correo,
+            "direccion": self.direccion,
+            "genero": self.genero,
+            "observaciones": self.observaciones,
+            "estado": self.estado
+        }
 
     def __repr__(self):
         return f'<Paciente {self.nombre}>'
@@ -97,6 +136,22 @@ class Cita(db.Model):
     paciente = db.relationship("Paciente", back_populates="citas")
     medico = db.relationship("Medico", back_populates="citas")
     especialidad = db.relationship("Especialidad", back_populates="citas")
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "fecha": self.fecha.strftime("%Y-%m-%d") if self.fecha else None,
+            "hora": self.hora.strftime("%H:%M") if self.hora else None,
+            "duracion_min": self.duracion_min,
+            "estado": self.estado,
+            "detalles": self.detalles,
+            "paciente_id": self.paciente_id,
+            "medico_id": self.medico_id,
+            "especialidad_id": self.especialidad_id,
+            "paciente": f"{self.paciente.nombre} {self.paciente.apellido}" if self.paciente else None,
+            "medico": f"{self.medico.nombres} {self.medico.apellidos}" if self.medico else None,
+            "especialidad": self.especialidad.nombre if self.especialidad else None
+        }
 
     def __repr__(self):
         return f'<Cita {self.id}>'
