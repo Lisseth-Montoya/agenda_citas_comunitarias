@@ -1,6 +1,7 @@
 from datetime import datetime
 from . import db
 
+
 # ============================================================
 #  ESPECIALIDADES MÉDICAS
 # ============================================================
@@ -37,13 +38,12 @@ class Medico(db.Model):
     dui = db.Column(db.String(15), unique=True, nullable=False)
     telefono = db.Column(db.String(20))
     email = db.Column(db.String(120))
-
     estado = db.Column(db.String(20), default="Activo")
 
     # FK → Especialidad
     especialidad_id = db.Column(db.Integer, db.ForeignKey('especialidades.id'), nullable=False)
 
-    # Relación con especialidad
+    # Relación correcta (solo una)
     especialidad = db.relationship("Especialidad", back_populates="medicos")
 
     # Relación con citas
@@ -94,7 +94,7 @@ class Cita(db.Model):
     medico_id = db.Column(db.Integer, db.ForeignKey("medicos.id"))
     especialidad_id = db.Column(db.Integer, db.ForeignKey("especialidades.id"))
 
-    # Relaciones correctas (SIN backref duplicado)
+    # Relaciones
     paciente = db.relationship("Paciente", back_populates="citas")
     medico = db.relationship("Medico", back_populates="citas")
     especialidad = db.relationship("Especialidad", back_populates="citas")

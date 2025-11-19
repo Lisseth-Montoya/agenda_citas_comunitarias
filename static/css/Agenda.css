@@ -85,13 +85,11 @@ body {
   pointer-events: none;
 }
 
-/* ==============================
-   MODAL (FIX PARA QUE NO SE VEA "LA PANTALLA GRIS")
-   ============================== */
+
 
 /* Fondo detrás del modal */
 .modal-backdrop.show {
-  opacity: 0.35 !important; /* menos oscuro */
+  opacity: 0.35 !important; 
   background-color: #000 !important;
   z-index: 1040 !important;
 }

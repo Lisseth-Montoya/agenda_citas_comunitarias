@@ -172,7 +172,7 @@ body{
 /* HEADER estilo igual al footer */
 .app-header {
   background-color: var(--white);
-  border-bottom: 4px solid var(--teal-700);  /* Igual que el footer */
+  border-bottom: 4px solid var(--teal-700);  
   height: var(--header-h);
   display: flex;
   align-items: center;

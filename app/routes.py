@@ -56,7 +56,7 @@ def citas_registrar():
         estado = request.form.get("estado")
         notas = request.form.get("notas")
 
-        # BUSCAR O CREAR PACIENTE
+        # Buscar o crear paciente
         pac = Paciente.query.filter_by(dui=dui).first()
 
         if pac is None:
@@ -68,7 +68,7 @@ def citas_registrar():
                 pac.nombre = nombre_paciente
                 db.session.commit()
 
-        # EDITAR
+        # EDITAR CITA
         if id_editar:
             cita = Cita.query.get(id_editar)
 
@@ -100,7 +100,7 @@ def citas_registrar():
         db.session.commit()
         return redirect(url_for("main.agenda"))
 
-    # GET → formulario
+    # GET — mostrar formulario
     editar_id = request.args.get("editar")
     cita = Cita.query.get(editar_id) if editar_id else None
 
@@ -117,7 +117,7 @@ def citas_registrar():
 
 
 # =====================================================
-# ELIMINAR CITA (AJAX)
+# ELIMINAR CITA
 # =====================================================
 @bp.route("/citas/eliminar/<int:id>", methods=["DELETE"])
 def citas_eliminar(id):
@@ -131,7 +131,7 @@ def citas_eliminar(id):
 
 
 # =====================================================
-# AGENDA SEMANAL (Página principal)
+# AGENDA SEMANAL
 # =====================================================
 @bp.route("/agenda/semanal")
 def agenda_semanal():
@@ -181,20 +181,197 @@ def api_citas_semana():
 
 
 # =====================================================
-# OTRAS PÁGINAS
+# PÁGINAS SECCIONALES
 # =====================================================
 @bp.route("/perfiles-medicos")
-def perfiles_medicos():
+def vista_perfiles_medicos():
     return render_template("modulos/PerfilesMedicos/P-medicos.html", title="Perfiles Médicos")
 
+
 @bp.route("/pacientes")
-def pacientes():
+def vista_pacientes():
     return render_template("modulos/Pacientes/Pacientes.html", title="Pacientes")
 
+
 @bp.route("/especialidades")
-def especialidades():
+def vista_especialidades():
     return render_template("modulos/especialidades/especialidades.html", title="Especialidades")
 
-@bp.route("/reportes")
-def reportes():
-    return render_template("layout/index.html", title="Reportes")
+
+# =====================================================
+# MÉDICOS – CRUD API
+# =====================================================
+@bp.route("/api/medicos/listar")
+def api_medicos_listar():
+    medicos = Medico.query.all()
+
+    data = []
+    for m in medicos:
+        data.append({
+            "id": m.id,
+            "nombres": m.nombres,
+            "apellidos": m.apellidos,
+            "dui": m.dui,
+            "especialidad": m.especialidad.nombre if m.especialidad else "",
+            "telefono": m.telefono,
+            "email": m.email,
+            "estado": m.estado
+        })
+
+    return jsonify(data)
+
+
+@bp.route("/api/medicos/guardar", methods=["POST"])
+def api_medicos_guardar():
+    data = request.json
+
+    id_medico = data.get("id")
+    nombres = data.get("nombres")
+    apellidos = data.get("apellidos")
+    dui = data.get("dui")
+    especialidad = data.get("especialidad")
+    telefono = data.get("telefono")
+    email = data.get("email")
+    estado = data.get("estado")
+
+    if id_medico:
+        medico = Medico.query.get(id_medico)
+        if not medico:
+            return jsonify({"error": "Médico no encontrado"}), 404
+    else:
+        medico = Medico()
+
+    medico.nombres = nombres
+    medico.apellidos = apellidos
+    medico.dui = dui
+    medico.telefono = telefono
+    medico.email = email
+    medico.estado = estado
+
+    esp = Especialidad.query.filter_by(nombre=especialidad).first()
+    if not esp:
+        esp = Especialidad(nombre=especialidad, descripcion="Auto", duracion_min=30, precio_base=0)
+        db.session.add(esp)
+        db.session.commit()
+
+    medico.especialidad_id = esp.id
+    db.session.add(medico)
+    db.session.commit()
+
+    return jsonify({"mensaje": "Guardado correctamente"})
+
+
+@bp.route("/api/medicos/obtener/<int:id>")
+def api_medicos_obtener(id):
+    m = Medico.query.get(id)
+    if not m:
+        return jsonify({"error": "No encontrado"}), 404
+
+    return jsonify({
+        "id": m.id,
+        "nombres": m.nombres,
+        "apellidos": m.apellidos,
+        "dui": m.dui,
+        "especialidad": m.especialidad.nombre if m.especialidad else "",
+        "telefono": m.telefono,
+        "email": m.email,
+        "estado": m.estado
+    })
+
+
+@bp.route("/api/medicos/eliminar/<int:id>", methods=["DELETE"])
+def api_medicos_eliminar(id):
+    m = Medico.query.get(id)
+    if not m:
+        return jsonify({"error": "No existe"}), 404
+
+    db.session.delete(m)
+    db.session.commit()
+
+    return jsonify({"mensaje": "Eliminado"})
+
+
+# =======================================================
+#   ESPECIALIDADES – CRUD API
+# =======================================================
+
+# LISTAR
+@bp.route("/api/especialidades/listar")
+def api_especialidades_listar():
+    especialidades = Especialidad.query.order_by(Especialidad.id.asc()).all()
+
+    data = []
+    for e in especialidades:
+        data.append({
+            "id": e.id,
+            "nombre": e.nombre,
+            "descripcion": e.descripcion,
+            "duracion_min": e.duracion_min,
+            "precio_base": e.precio_base,
+            "estado": e.estado,
+            "fecha_registro": e.fecha_registro.strftime("%Y-%m-%d %H:%M") if e.fecha_registro else "Sin fecha"
+        })
+
+    return jsonify(data)
+
+
+# GUARDAR / EDITAR
+@bp.route("/api/especialidades/guardar", methods=["POST"])
+def api_especialidades_guardar():
+    data = request.json
+
+    id_esp = data.get("id")
+    nombre = data.get("nombre")
+    descripcion = data.get("descripcion")
+    duracion_min = data.get("duracion_min")
+    precio_base = data.get("precio_base")
+    estado = data.get("estado")
+
+    if id_esp:
+        esp = Especialidad.query.get(id_esp)
+        if not esp:
+            return jsonify({"error": "Especialidad no encontrada"}), 404
+    else:
+        esp = Especialidad(fecha_registro=datetime.utcnow())
+
+    esp.nombre = nombre
+    esp.descripcion = descripcion
+    esp.duracion_min = duracion_min
+    esp.precio_base = precio_base
+    esp.estado = estado
+
+    db.session.add(esp)
+    db.session.commit()
+
+    return jsonify({"mensaje": "Guardado correctamente"})
+
+
+# OBTENER UNO
+@bp.route("/api/especialidades/obtener/<int:id>")
+def api_especialidades_obtener(id):
+    esp = Especialidad.query.get(id)
+    if not esp:
+        return jsonify({"error": "No encontrado"}), 404
+
+    return jsonify({
+        "id": esp.id,
+        "nombre": esp.nombre,
+        "descripcion": esp.descripcion,
+        "duracion_min": esp.duracion_min,
+        "precio_base": esp.precio_base,
+        "estado": esp.estado,
+        "fecha_registro": esp.fecha_registro.strftime("%Y-%m-%d %H:%M") if esp.fecha_registro else "Sin fecha"
+    })
+
+
+# ELIMINAR
+@bp.route("/api/especialidades/eliminar/<int:id>", methods=["DELETE"])
+def api_especialidades_eliminar(id):
+    esp = Especialidad.query.get(id)
+    if not esp:
+        return jsonify({"error": "No existe"}), 404
+
+    db.session.delete(esp)
+    db.session.commit()
+
+    return jsonify({"mensaje": "Eliminado"})
