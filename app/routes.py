@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, request, jsonif
 from app.models import db, Paciente
 from datetime import datetime
 
+# Blueprint principal
 bp = Blueprint("main", __name__)
 
 # ===================== RUTA PRINCIPAL =====================
