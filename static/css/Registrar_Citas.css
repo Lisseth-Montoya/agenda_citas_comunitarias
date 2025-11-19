@@ -1,4 +1,5 @@
-/* === ESTILOS GLOBALES DEL FORMULARIO === */
+
+/* === GLOBAL === */
 body {
   background-color: #ffffff;
   color: #333333;
@@ -18,19 +19,21 @@ label {
   color: #333333;
 }
 
-.form-control, .form-select {
+.form-control,
+.form-select {
   border: 1px solid #aaaaaa;
   border-radius: 8px;
   box-shadow: none;
   transition: all 0.2s ease-in-out;
 }
 
-.form-control:focus, .form-select:focus {
+.form-control:focus,
+.form-select:focus {
   border-color: #0a9a9e;
   box-shadow: 0 0 0 0.2rem rgba(10, 154, 158, 0.25);
 }
 
-/* === BOTONES PRINCIPALES === */
+/* === BOTÓN PRINCIPAL === */
 .btn-primary {
   background-color: #0a9a9e;
   border: none;
@@ -40,7 +43,7 @@ label {
   background-color: #0cb3b7;
 }
 
-/* === TITULOS Y CABECERAS === */
+/* === CARD HEADER === */
 .card-header {
   background-color: #0a9a9e;
   color: #ffffff;
@@ -52,7 +55,7 @@ label {
   margin-bottom: 1.2rem !important;
 }
 
-/* === PLACEHOLDERS Y TEXTOS GRISES === */
+/* === PLACEHOLDERS === */
 ::placeholder {
   color: #aaaaaa;
 }
@@ -63,4 +66,54 @@ label {
 
 #dui::placeholder {
   color: #aaaaaa;
+}
+
+/* ==========================================================
+   BOTONES DE ACCIÓN — Tabla (Ver, Editar, Eliminar)
+   Compatibles 100% con la paleta oficial
+========================================================== */
+
+/* Ver (turquesa oscuro) */
+.btn-ver {
+  color: #0a9a9e;
+  border: 2px solid #0a9a9e;
+  border-radius: 6px;
+  padding: 6px;
+  background: transparent;
+  transition: 0.2s ease;
+}
+
+.btn-ver:hover {
+  background-color: #0a9a9e;
+  color: #ffffff;
+}
+
+/* Editar (turquesa claro) */
+.btn-editar {
+  color: #0cb3b7;
+  border: 2px solid #0cb3b7;
+  border-radius: 6px;
+  padding: 6px;
+  background: transparent;
+  transition: 0.2s ease;
+}
+
+.btn-editar:hover {
+  background-color: #0cb3b7;
+  color: #ffffff;
+}
+
+/* Eliminar (gris oscuro corporativo) */
+.btn-eliminar {
+  color: #333333;
+  border: 2px solid #333333;
+  border-radius: 6px;
+  padding: 6px;
+  background: transparent;
+  transition: 0.2s ease;
+}
+
+.btn-eliminar:hover {
+  background-color: #333333;
+  color: #ffffff;
 }

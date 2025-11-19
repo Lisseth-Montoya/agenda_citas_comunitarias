@@ -29,18 +29,18 @@ function renderizarTabla(lista) {
                 <td>${p.nombre}</td>
                 <td>${p.apellido}</td>
                 <td>${p.dui}</td>
-                <td>${p.fecha_nacimiento}</td>
+                <td>${p.fecha_nac}</td>
                 <td>${p.telefono}</td>
-                <td>${p.email}</td>
+                <td>${p.correo}</td>
                 <td>${p.genero === "M" ? "Masculino" : "Femenino"}</td>
                 <td>${p.observaciones}</td>
                 <td>${p.direccion}</td>
                 <td>${p.estado}</td>
                 <td>
-                    <button class="btn btn-warning btn-sm" onclick="editarPaciente(${p.id_paciente})">
+                    <button class="btn btn-warning btn-sm" onclick="editarPaciente(${p.id})">
                         <i class="bi bi-pencil-square"></i>
                     </button>
-                    <button class="btn btn-danger btn-sm" onclick="eliminarPaciente(${p.id_paciente})">
+                    <button class="btn btn-danger btn-sm" onclick="eliminarPaciente(${p.id})">
                         <i class="bi bi-trash"></i>
                     </button>
                 </td>
@@ -54,16 +54,16 @@ function renderizarTabla(lista) {
 // 3) CARGAR PACIENTE EN FORMULARIO
 // ----------------------------------------------
 function editarPaciente(id) {
-    const p = todosLosPacientes.find(x => x.id_paciente == id);
+    const p = todosLosPacientes.find(x => x.id == id);
     if (!p) return;
 
-    document.getElementById("id_paciente").value = p.id_paciente;
+    document.getElementById("id_paciente").value = p.id;
     document.getElementById("nombre").value = p.nombre;
     document.getElementById("apellido").value = p.apellido;
     document.getElementById("dui").value = p.dui;
-    document.getElementById("fechaNacimiento").value = p.fecha_nacimiento;
+    document.getElementById("fechaNacimiento").value = p.fecha_nac;
     document.getElementById("telefono").value = p.telefono;
-    document.getElementById("correo").value = p.email;
+    document.getElementById("correo").value = p.correo;
     document.getElementById("genero").value = p.genero;
     document.getElementById("estado").value = p.estado;
     document.getElementById("direccion").value = p.direccion;
@@ -81,13 +81,14 @@ form.addEventListener("submit", (e) => {
 
     const id = document.getElementById("id_paciente").value;
 
+    // 🔥 IMPORTANTE: los nombres deben ser IGUALES al backend
     const paciente = {
         nombre: document.getElementById("nombre").value,
         apellido: document.getElementById("apellido").value,
         dui: document.getElementById("dui").value,
-        fecha_nacimiento: document.getElementById("fechaNacimiento").value,
+        fecha_nac: document.getElementById("fechaNacimiento").value,
         telefono: document.getElementById("telefono").value,
-        email: document.getElementById("correo").value,
+        correo: document.getElementById("correo").value,
         genero: document.getElementById("genero").value,
         estado: document.getElementById("estado").value,
         direccion: document.getElementById("direccion").value,
@@ -138,9 +139,10 @@ function filtrarPacientes() {
 
     const filtrados = todosLosPacientes.filter(p => {
         const nombreCompleto = `${p.nombre} ${p.apellido}`.toLowerCase();
-        const coincideNombre = nombreCompleto.includes(filtroNombre);
-        const coincideDui = p.dui.toLowerCase().includes(filtroDui);
-        return coincideNombre && coincideDui;
+        return (
+            nombreCompleto.includes(filtroNombre) &&
+            p.dui.toLowerCase().includes(filtroDui)
+        );
     });
 
     renderizarTabla(filtrados);

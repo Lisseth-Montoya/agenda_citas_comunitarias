@@ -10,14 +10,14 @@
 
   --header-h:56px;
   --sidebar-w:280px;
-  --footer-h:64px;          /* Altura del footer fijo */
+  --footer-h:64px;
 }
 
 html, body { height:100%; }
 
 body{
-  overflow:hidden;              /* El scroll se hace en .content-wrapper */
-  background:#e3eaee;           /* 👈 gris más marcado, menos “blanco puro” */
+  overflow:hidden;
+  background:#e3eaee;
   color:var(--dark-900);
 }
 
@@ -28,11 +28,10 @@ body{
    HEADER
    ========================================================= */
 
-/* Header con línea teal y sombra suave */
 .app-header{
   background-color: var(--white);
   border-bottom: 3px solid var(--teal-700);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.04);  /* 👈 un poco de profundidad */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.04);
 }
 
 .app-header h1{ color:var(--dark-900); }
@@ -40,16 +39,16 @@ body{
 /* =========================================================
    SIDEBAR
    ========================================================= */
+
 .sidebar-header{
   background:var(--teal-700);
 }
 
-/* Fondo general del sidebar un poco más oscuro que el contenido */
 .app-sidebar{
   background:#f3f6f7;
 }
 
-/* Links del menú */
+/* Links */
 .nav .nav-link{
   border-radius:.5rem;
   padding:.55rem .75rem;
@@ -58,7 +57,7 @@ body{
 }
 .nav .nav-link i{ opacity:.9; }
 .nav .nav-link:hover{
-  background:rgba(10,154,158,.12); /* #0a9a9e con un poco más de intensidad */
+  background:rgba(10,154,158,.12);
 }
 .nav .nav-link.active{
   background:var(--teal-500);
@@ -66,21 +65,65 @@ body{
 }
 .nav .nav-link.active i{ color:var(--white); }
 
-/* Subtítulos de sección */
 .text-muted{ color:var(--gray-500)!important; }
 
-/* Fondo offcanvas (móvil) */
 .app-sidebar .offcanvas-body{ background:#f3f6f7; }
 
 /* =========================================================
-   BOTONES
+   BOTONES (PRINCIPALES + ACCIÓN)
    ========================================================= */
+
+/* Secundario */
 .btn-outline-secondary{
   color:var(--dark-900);
   border-color:#d0d7dd;
 }
 .btn-outline-secondary:hover{
   background:#f0f2f4;
+}
+
+/* === BOTONES PERSONALIZADOS DE ACCIÓN === */
+
+/* VER (.btn-info → teal oscuro) */
+.btn-info{
+  background:transparent!important;
+  color:var(--teal-700)!important;
+  border:2px solid var(--teal-700)!important;
+  border-radius:6px;
+  padding:6px;
+  transition:.2s ease;
+}
+.btn-info:hover{
+  background:var(--teal-700)!important;
+  color:var(--white)!important;
+}
+
+/* EDITAR (.btn-warning → teal claro) */
+.btn-warning{
+  background:transparent!important;
+  color:var(--teal-500)!important;
+  border:2px solid var(--teal-500)!important;
+  border-radius:6px;
+  padding:6px;
+  transition:.2s ease;
+}
+.btn-warning:hover{
+  background:var(--teal-500)!important;
+  color:var(--white)!important;
+}
+
+/* ELIMINAR (.btn-danger → dark-900) */
+.btn-danger{
+  background:transparent!important;
+  color:var(--dark-900)!important;
+  border:2px solid var(--dark-900)!important;
+  border-radius:6px;
+  padding:6px;
+  transition:.2s ease;
+}
+.btn-danger:hover{
+  background:var(--dark-900)!important;
+  color:var(--white)!important;
 }
 
 /* =========================================================
@@ -96,9 +139,9 @@ body{
 }
 
 /* =========================================================
-   LAYOUT GENERAL
-   (Header fijo + Sidebar fija + Contenido con scroll)
+   LAYOUT GENERAL (HEADER + SIDEBAR + CONTENT)
    ========================================================= */
+
 @media (min-width:992px){
   .app-sidebar{
     position:fixed;
@@ -108,8 +151,6 @@ body{
     height:calc(100dvh - var(--header-h));
     border-right:1px solid #dde3e7;
     overflow:auto;
-    transform:none!important;
-    visibility:visible!important;
   }
 
   .content-wrapper{
@@ -117,21 +158,20 @@ body{
     top:var(--header-h);
     left:var(--sidebar-w);
     right:0;
-    bottom:var(--footer-h);      /* deja espacio para el footer fijo */
-    background:#f6f8fa;          /* 👈 distinto al body, menos plano */
+    bottom:var(--footer-h);
+    background:#f6f8fa;
     overflow:auto;
     padding:1.5rem;
   }
 }
 
-/* En pantallas móviles */
 @media (max-width:991.98px){
   .content-wrapper{
     position:fixed;
     top:var(--header-h);
     left:0;
     right:0;
-    bottom:var(--footer-h);      /* deja espacio para el footer fijo */
+    bottom:var(--footer-h);
     background:#f6f8fa;
     overflow:auto;
     padding:1.25rem;
@@ -139,78 +179,33 @@ body{
 }
 
 /* =========================================================
-   FOOTER FIJO 
+   FOOTER
    ========================================================= */
+
 .app-footer{
   position:fixed;
   left:0;
   right:0;
   bottom:0;
   height:var(--footer-h);
-  background-color:var(--dark-900);
-  color:var(--white);
-  border-top:4px solid var(--teal-700);
-  box-shadow:0 -2px 6px rgba(0,0,0,0.18);
+  background-color:#f5f7f9;
+  border-top:2px solid var(--teal-700);
+  box-shadow:0 -1px 6px rgba(0,0,0,0.06);
   display:flex;
   align-items:center;
-}
-
-.text-footer-title{
-  color:var(--teal-500);
-  letter-spacing:.5px;
-}
-
-.text-footer{
-  font-size:.95rem;
-}
-
-.text-footer-small{
-  color:var(--gray-500);
-  font-size:.85rem;
-}
-
-/* HEADER estilo igual al footer */
-.app-header {
-  background-color: var(--white);
-  border-bottom: 4px solid var(--teal-700);  
-  height: var(--header-h);
-  display: flex;
-  align-items: center;
-  z-index: 2000;
-}
-
-.app-header img {
-  border-radius: 8px;
-}
-
-.app-header .text-secondary {
-  color: #6c757d !important;
-}
-
-
-
-
-
-/* =========================================================
-   FOOTER LIMPIO
-   ========================================================= */
-.app-footer{
-  background-color: #f5f7f9;
-  border-top: 2px solid var(--teal-700);
-  box-shadow: 0 -1px 6px rgba(0,0,0,0.06);
-  font-size: .9rem;
+  font-size:.9rem;
 }
 
 .footer-title{
-  color: var(--teal-700);
+  color:var(--teal-700);
 }
 
 .footer-text{
-  color: var(--dark-900);
-  font-size: .85rem;
+  color:var(--dark-900);
+  font-size:.85rem;
 }
 
 .footer-copy{
-  color: var(--gray-500);
-  font-size: .8rem;
+  color:var(--gray-500);
+  font-size:.8rem;
 }

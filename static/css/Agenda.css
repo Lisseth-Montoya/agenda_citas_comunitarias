@@ -8,7 +8,6 @@
   --color-white: #ffffff;
   --color-gray: #aaaaaa;
 
-  /* Agregados para modal */
   --modal-bg: #ffffff;
   --modal-header-bg: #0a9a9e;
 }
@@ -46,63 +45,58 @@ body {
   background-color: rgba(10, 154, 158, 0.07);
 }
 
-/* ==============================
-   BOTONES OUTLINE
-   ============================== */
+
+
+/* VER - Outline PRIMARY */
 .btn-outline-primary {
   border-color: var(--color-primary);
   color: var(--color-primary);
 }
-
 .btn-outline-primary:hover {
   background-color: var(--color-primary);
   color: var(--color-white);
 }
 
+/* EDITAR - usará turquesa claro */
 .btn-outline-warning {
-  border-color: #ffc107;
-  color: #b78904;
+  border-color: var(--color-primary-light);
+  color: var(--color-primary-light);
 }
-
 .btn-outline-warning:hover {
-  background-color: #ffc107;
-  color: #000;
-}
-
-.btn-outline-danger {
-  border-color: #dc3545;
-  color: #dc3545;
-}
-
-.btn-outline-danger:hover {
-  background-color: #dc3545;
+  background-color: var(--color-primary-light);
   color: var(--color-white);
 }
 
-/* Íconos más centrados */
+/* ELIMINAR - usará gris carbón */
+.btn-outline-danger {
+  border-color: var(--color-dark);
+  color: var(--color-dark);
+}
+.btn-outline-danger:hover {
+  background-color: var(--color-dark);
+  color: var(--color-white);
+}
+
+/* Íconos centrados */
 .btn i {
   font-size: 1rem;
   pointer-events: none;
 }
 
-
-
-/* Fondo detrás del modal */
+/* ==============================
+   MODAL
+   ============================== */
 .modal-backdrop.show {
-  opacity: 0.35 !important; 
+  opacity: 0.35 !important;
   background-color: #000 !important;
-  z-index: 1040 !important;
 }
 
-/* Panel del modal */
 .modal-content {
   background-color: var(--modal-bg);
   border-radius: 10px;
   padding-bottom: 5px;
-  z-index: 1055 !important;
 }
 
-/* Header del modal */
 .modal-header {
   background-color: var(--modal-header-bg) !important;
   color: white !important;
@@ -110,7 +104,6 @@ body {
   border-top-right-radius: 10px;
 }
 
-/* Modal centrado correcto */
 .modal-dialog {
   z-index: 1055 !important;
 }

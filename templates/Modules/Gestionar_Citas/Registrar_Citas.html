@@ -15,18 +15,14 @@
     </h2>
   </div>
 
-  <div class="alert alert-info mb-4">
-    Complete todos los campos obligatorios antes de guardar la cita.
-  </div>
-
   <div class="card shadow-sm">
     <div class="card-body">
 
+      
       <form id="formCita"
             method="POST"
             action="{{ url_for('main.citas_registrar') }}"
-            class="needs-validation"
-            novalidate>
+            class="needs-validation">
 
         {% if cita %}
           <input type="hidden" name="id_editar" value="{{ cita.id }}">
@@ -43,13 +39,13 @@
                    id="paciente"
                    value="{{ cita.paciente.nombre if cita else '' }}"
                    placeholder="Ingrese nombre completo"
+                   minlength="3"
                    required>
           </div>
 
           <!-- DUI -->
           <div class="col-md-6">
             <label for="dui" class="form-label">DUI *</label>
-
             <div class="input-group">
               <input type="text"
                      name="dui"
@@ -57,8 +53,8 @@
                      id="dui"
                      value="{{ cita.paciente.dui if cita else '' }}"
                      placeholder="00000000-0"
+                     pattern="\d{8}-\d{1}"
                      required>
-
               <a id="btnRegistrarPaciente" class="btn btn-outline-primary" href="#">
                 <i class="bi bi-person-plus"></i>
               </a>
@@ -68,7 +64,10 @@
           <!-- Especialidad -->
           <div class="col-md-6">
             <label for="especialidad" class="form-label">Servicio o Especialidad *</label>
-            <select class="form-select" name="especialidad" id="especialidad" required>
+            <select class="form-select"
+                    name="especialidad"
+                    id="especialidad"
+                    required>
               <option selected disabled value="">Seleccione una opción</option>
 
               {% for esp in especialidades %}
@@ -83,7 +82,10 @@
           <!-- Profesional -->
           <div class="col-md-6">
             <label for="profesional" class="form-label">Profesional *</label>
-            <select class="form-select" name="profesional" id="profesional" required>
+            <select class="form-select"
+                    name="profesional"
+                    id="profesional"
+                    required>
               <option selected disabled value="">Seleccione un profesional</option>
 
               {% for m in medicos %}
@@ -146,6 +148,7 @@
             <textarea class="form-control"
                       name="notas"
                       id="notas"
+                      maxlength="300"
                       rows="3">{{ cita.detalles if cita else '' }}</textarea>
           </div>
 

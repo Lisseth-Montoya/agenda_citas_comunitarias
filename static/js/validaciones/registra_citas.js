@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const btnRegistrarPaciente = document.getElementById("btnRegistrarPaciente");
 
     // ===========================================================
-    // BOTÓN: REGISTRAR PACIENTE
+    // BOTÓN: REGISTRAR PACIENTE (USA DUI)
     // ===========================================================
     btnRegistrarPaciente.addEventListener("click", (e) => {
         e.preventDefault();
@@ -129,7 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // ===========================================================
-    // Validación global al enviar (CORREGIDO)
+    // VALIDACIÓN GLOBAL DEL FORMULARIO
     // ===========================================================
     form.addEventListener("submit", (e) => {
 
@@ -146,12 +146,16 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!valido) {
             e.preventDefault();
             e.stopPropagation();
+            form.classList.add("was-validated");
             alert("⚠️ Por favor complete correctamente todos los campos obligatorios.");
+            return;
         }
+
+        form.classList.add("was-validated");
     });
 
     // ===========================================================
-    // Validaciones en tiempo real
+    // VALIDACIONES EN TIEMPO REAL
     // ===========================================================
     paciente.addEventListener("input", validarNombre);
     dui.addEventListener("input", validarDUI);
@@ -161,4 +165,5 @@ document.addEventListener("DOMContentLoaded", () => {
     hora.addEventListener("change", validarHora);
     duracion.addEventListener("input", validarDuracion);
     notas.addEventListener("input", validarNotas);
+
 });

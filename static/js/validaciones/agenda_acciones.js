@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 tr.remove();
                 alert("Cita eliminada correctamente.");
             } else {
-                alert("❌ Error al eliminar la cita.");
+                alert("Error al eliminar la cita.");
             }
         });
     });
