@@ -81,7 +81,6 @@ form.addEventListener("submit", (e) => {
 
     const id = document.getElementById("id_paciente").value;
 
-    // 🔥 IMPORTANTE: los nombres deben ser IGUALES al backend
     const paciente = {
         nombre: document.getElementById("nombre").value,
         apellido: document.getElementById("apellido").value,

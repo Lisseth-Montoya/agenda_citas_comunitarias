@@ -1,0 +1,168 @@
+-- ============================================================
+--   CREACIÓN DE BASE DE DATOS
+-- ============================================================
+DROP DATABASE IF EXISTS agenda_medica;
+CREATE DATABASE agenda_medica CHARACTER SET utf8mb4;
+USE agenda_medica;
+
+
+-- ============================================================
+--   TABLA: ESPECIALIDADES
+-- ============================================================
+CREATE TABLE especialidades (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    descripcion TEXT NOT NULL,
+    duracion_min INT NOT NULL,
+    precio_base DECIMAL(10,2) NOT NULL,
+    estado VARCHAR(20) DEFAULT 'Activo',
+    fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ======================= DATOS ===========================
+INSERT INTO especialidades (nombre, descripcion, duracion_min, precio_base)
+VALUES
+('Medicina General', 'Consultas básicas y chequeos generales', 30, 10.00),
+('Pediatría', 'Atención médica para niños y adolescentes', 30, 12.00),
+('Ginecología', 'Control y salud del sistema reproductor femenino', 40, 15.00),
+('Cardiología', 'Evaluación y tratamiento de enfermedades cardíacas', 45, 25.00),
+('Dermatología', 'Tratamiento de la piel, cabello y uñas', 30, 18.00),
+('Neurología', 'Tratamiento de trastornos del sistema nervioso', 50, 28.00),
+('Odontología', 'Atención dental y preventiva', 30, 20.00),
+('Oftalmología', 'Atención de la vista y problemas oculares', 30, 22.00),
+('Traumatología', 'Atención de huesos y lesiones', 40, 23.00),
+('Nutrición', 'Control alimenticio y dietas', 30, 10.00),
+('Psicología', 'Atención emocional y psicológica', 60, 18.00),
+('Psiquiatría', 'Diagnóstico y tratamiento de trastornos mentales', 60, 35.00),
+('Endocrinología', 'Hormonas y metabolismo', 45, 30.00),
+('Gastroenterología', 'Digestivo y estómago', 40, 27.00),
+('Nefrología', 'Riñones y sistema urinario', 45, 29.00),
+('Oncología', 'Cáncer y tumores', 60, 40.00),
+('Reumatología', 'Enfermedades articulares', 40, 24.00),
+('Fisioterapia', 'Rehabilitación y terapias físicas', 45, 15.00),
+('Otorrinolaringología', 'Oídos, nariz y garganta', 30, 18.00),
+('Urología', 'Tracto urinario masculino', 40, 20.00);
+
+
+-- ============================================================
+--   TABLA: MEDICOS
+-- ============================================================
+CREATE TABLE medicos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombres VARCHAR(120) NOT NULL,
+    apellidos VARCHAR(120) NOT NULL,
+    dui VARCHAR(15) NOT NULL UNIQUE,
+    telefono VARCHAR(20),
+    email VARCHAR(120),
+    estado VARCHAR(20) DEFAULT 'Activo',
+    especialidad_id INT NOT NULL,
+    FOREIGN KEY (especialidad_id) REFERENCES especialidades(id)
+);
+
+-- ======================= DATOS ===========================
+INSERT INTO medicos (nombres, apellidos, dui, telefono, email, especialidad_id) VALUES
+('Carlos', 'Hernández', '01234567-1', '7012-1020', 'carlos@gmail.com', 1),
+('María', 'López', '12345678-2', '7015-9040', 'maria@gmail.com', 2),
+('Luis', 'Castro', '23456789-3', '7023-2040', 'luisca@gmail.com', 3),
+('Ana', 'Reyes', '34567890-4', '7034-2039', 'anarey@gmail.com', 4),
+('José', 'Martínez', '45678901-5', '7045-1023', 'jmart@gmail.com', 5),
+('Andrea', 'Fuentes', '56789012-6', '7056-9080', 'andreaf@gmail.com', 6),
+('Daniel', 'Rivas', '67890123-7', '7067-9099', 'drivas@gmail.com', 7),
+('Laura', 'Mejía', '78901234-8', '7078-1122', 'lmejia@gmail.com', 8),
+('Fernando', 'Campos', '89012345-9', '7089-1223', 'fcampos@gmail.com', 9),
+('Julia', 'Orellana', '90123456-0', '7090-3344', 'jore@gmail.com', 10),
+('Pedro', 'Zepeda', '11112222-3', '7010-4455', 'pedro@gmail.com', 11),
+('Karla', 'Hidalgo', '22223333-4', '7020-5566', 'karlah@gmail.com', 12),
+('Ricardo', 'Luna', '33334444-5', '7030-6677', 'rluna@gmail.com', 13),
+('Mónica', 'Velásquez', '44445555-6', '7040-7788', 'monica@gmail.com', 14),
+('Diego', 'Pérez', '55556666-7', '7050-8899', 'dperez@gmail.com', 15),
+('Silvia', 'Arias', '66667777-8', '7060-9900', 'sarias@gmail.com', 16),
+('Héctor', 'Guzmán', '77778888-9', '7070-1111', 'hguzman@gmail.com', 17),
+('Patricia', 'Romero', '88889999-0', '7080-2222', 'pr@gmail.com', 18),
+('Mauricio', 'Ramos', '99990000-1', '7090-3333', 'mramos@gmail.com', 19),
+('Sofía', 'Sánchez', '12121212-1', '7012-4444', 'sofia@gmail.com', 20);
+
+
+-- ============================================================
+--   TABLA: PACIENTES
+-- ============================================================
+CREATE TABLE pacientes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(120) NOT NULL,
+    apellido VARCHAR(120) NOT NULL,
+    dui VARCHAR(15) NOT NULL UNIQUE,
+    fecha_nac DATE,
+    fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP,
+    telefono VARCHAR(20),
+    correo VARCHAR(120),
+    direccion VARCHAR(250),
+    genero VARCHAR(10),
+    observaciones TEXT,
+    estado VARCHAR(20) DEFAULT 'Activo'
+);
+
+-- ======================= DATOS ===========================
+INSERT INTO pacientes (nombre, apellido, dui, fecha_nac, telefono, correo, direccion, genero)
+VALUES
+('Juan', 'Pérez', '00000001-1', '1990-01-12', '7001-1001', 'juan@gmail.com', 'Ilobasco', 'Masculino'),
+('María', 'García', '00000002-2', '1995-05-09', '7002-2002', 'maria@gmail.com', 'Sensuntepeque', 'Femenino'),
+('Luis', 'Ramírez', '00000003-3', '1988-02-21', '7003-3003', 'luis@gmail.com', 'Cojutepeque', 'Masculino'),
+('Ana', 'Orellana', '00000004-4', '2000-03-30', '7004-4004', 'ana@gmail.com', 'San Vicente', 'Femenino'),
+('Karla', 'Molina', '00000005-5', '1999-12-01', '7005-5005', 'karla@gmail.com', 'Ilobasco', 'Femenino'),
+('José', 'Reyes', '00000006-6', '1992-07-07', '7006-6006', 'jose@gmail.com', 'San Salvador', 'Masculino'),
+('Pedro', 'Alvarado', '00000007-7', '1975-11-05', '7007-7007', 'pedro@gmail.com', 'Apastepeque', 'Masculino'),
+('Laura', 'Fuentes', '00000008-8', '1998-04-14', '7008-8008', 'laura@gmail.com', 'Ilobasco', 'Femenino'),
+('Ricardo', 'Méndez', '00000009-9', '1985-09-22', '7009-9009', 'ric@gmail.com', 'San Vicente', 'Masculino'),
+('Sonia', 'Santos', '00000010-0', '2002-10-29', '7010-1212', 'sonia@gmail.com', 'Cabañas', 'Femenino'),
+('Daniel', 'Cañas', '00000011-1', '1997-01-01', '7011-1313', 'daniel@gmail.com', 'San Salvador', 'Masculino'),
+('Patricia', 'Díaz', '00000012-2', '1996-02-02', '7012-1414', 'patricia@gmail.com', 'Ilobasco', 'Femenino'),
+('Miguel', 'Castro', '00000013-3', '1980-03-03', '7013-1515', 'miguel@gmail.com', 'Cojutepeque', 'Masculino'),
+('Sofía', 'Rivas', '00000014-4', '1993-04-04', '7014-1616', 'sofia@gmail.com', 'San Vicente', 'Femenino'),
+('Emilio', 'Pineda', '00000015-5', '1989-05-05', '7015-1717', 'emilio@gmail.com', 'Ilobasco', 'Masculino'),
+('Yolanda', 'López', '00000016-6', '1994-06-06', '7016-1818', 'yolanda@gmail.com', 'Sensuntepeque', 'Femenino'),
+('Carlos', 'Méndez', '00000017-7', '1983-07-07', '7017-1919', 'carlos@gmail.com', 'Cabañas', 'Masculino'),
+('Flor', 'Martínez', '00000018-8', '1991-08-08', '7018-2020', 'flor@gmail.com', 'Ilobasco', 'Femenino'),
+('Diego', 'Campos', '00000019-9', '1990-09-09', '7019-2121', 'diego@gmail.com', 'Apastepeque', 'Masculino'),
+('Jenny', 'Cabrera', '00000020-0', '2001-10-10', '7020-2222', 'jenny@gmail.com', 'Cojutepeque', 'Femenino');
+
+
+-- ============================================================
+--   TABLA: CITAS
+-- ============================================================
+CREATE TABLE citas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    fecha DATE,
+    hora TIME,
+    duracion_min INT,
+    estado VARCHAR(20),
+    detalles TEXT,
+    paciente_id INT,
+    medico_id INT,
+    especialidad_id INT,
+    FOREIGN KEY (paciente_id) REFERENCES pacientes(id),
+    FOREIGN KEY (medico_id) REFERENCES medicos(id),
+    FOREIGN KEY (especialidad_id) REFERENCES especialidades(id)
+);
+
+-- ======================= DATOS ===========================
+INSERT INTO citas (fecha, hora, duracion_min, estado, detalles, paciente_id, medico_id, especialidad_id) VALUES
+('2025-01-10', '08:00:00', 30, 'Programada', 'Chequeo general', 1, 1, 1),
+('2025-01-10', '08:30:00', 30, 'Programada', 'Control pediátrico', 2, 2, 2),
+('2025-01-10', '09:00:00', 40, 'Programada', 'Dolor abdominal', 3, 3, 3),
+('2025-01-10', '09:40:00', 45, 'Programada', 'Presión alta', 4, 4, 4),
+('2025-01-11', '10:00:00', 30, 'Programada', 'Revisión de piel', 5, 5, 5),
+('2025-01-11', '10:30:00', 50, 'Programada', 'Migraña', 6, 6, 6),
+('2025-01-11', '11:20:00', 30, 'Programada', 'Dolor dental', 7, 7, 7),
+('2025-01-11', '11:50:00', 30, 'Programada', 'Visión borrosa', 8, 8, 8),
+('2025-01-12', '08:00:00', 40, 'Programada', 'Dolor de rodilla', 9, 9, 9),
+('2025-01-12', '08:40:00', 30, 'Programada', 'Plan nutricional', 10, 10, 10),
+('2025-01-12', '09:10:00', 60, 'Programada', 'Evaluación emocional', 11, 11, 11),
+('2025-01-12', '10:10:00', 60, 'Programada', 'Esquizofrenia control', 12, 12, 12),
+('2025-01-13', '08:00:00', 45, 'Programada', 'Control hormonal', 13, 13, 13),
+('2025-01-13', '08:45:00', 40, 'Programada', 'Reflujo estomacal', 14, 14, 14),
+('2025-01-13', '09:25:00', 45, 'Programada', 'Problemas renales', 15, 15, 15),
+('2025-01-13', '10:10:00', 60, 'Programada', 'Evaluación cáncer', 16, 16, 16),
+('2025-01-14', '08:00:00', 40, 'Programada', 'Dolor articular', 17, 17, 17),
+('2025-01-14', '08:40:00', 45, 'Programada', 'Terapia física', 18, 18, 18),
+('2025-01-14', '09:25:00', 30, 'Programada', 'Dolor de oído', 19, 19, 19),
+('2025-01-14', '10:00:00', 40, 'Programada', 'Dolor urinario', 20, 20, 20);
